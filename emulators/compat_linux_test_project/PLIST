@@ -1,0 +1,2 @@
+@comment $NetBSD $
+bin/compat_linux_test_project
