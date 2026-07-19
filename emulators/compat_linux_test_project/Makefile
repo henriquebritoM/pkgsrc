@@ -1,30 +1,42 @@
 # $NetBSD$
 
-DISTINFO=	compat_linux_test_project-0.10
 CATEGORIES=	emulators
-MASTER_SITES=	# empty
-DISTFILES=	# empty
+
+LTP_VERSION=	20260529
+PKGNAME=	compat_linux_test_project-${LTP_VERSION}-0.10
+
+MASTER_SITES=	https://github.com/linux-test-project/ltp/releases/download/${LTP_VERSION}/
+DISTFILES=	ltp-full-${LTP_VERSION}.tar.xz
+
+WRKSRC=		${WRKDIR}/ltp-full-${LTP_VERSION}
 
 MAINTAINER=	pkg-users@NetBSD.org
-COMMENT=	Package to run the Linux Test Project tests on NetBSD
+COMMENT=	Package to build and run the Linux Test Project tests on NetBSD
 
 NO_CONFIGURE=	YES
-NO_BUILD=		YES
 
 ONLY_FOR_PLATFORM=	NetBSD-*-x86_64
 
-USE_TOOLS+=	gmake pkgconf curl
+USE_TOOLS+=	gmake pkg-config
 
-DEPENDS+=	e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
-DEPENDS+=	suse_gcc12>=15.5:../../emulators/suse15_gcc12
-DEPENDS+=	suse_binutils>=15.5:../../emulators/suse15_binutils
-DEPENDS+=	suse_base>=15.5:../../emulators/suse15_base
+BUILD_DEPENDS+=	suse_gcc12>=15.5:../../emulators/suse15_gcc12
+DEPENDS+=		e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
 
-BUILD_DEFS+=		VARBASE
-INSTALLATION_DIRS=	bin
-MAKE_DIRS+=			${VARBASE}/db/compat_linux_test_project
+LTP_PREFIX=	libexec/compat_linux_test_project
+
+INSTALLATION_DIRS=	bin ${LTP_PREFIX}
+
+GENERATE_PLIST+=	cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
+			find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
+
+do-build:
+	cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
+		--dest ${WRKSRC}/${LTP_PREFIX}
 
 do-install:
-	${INSTALL_SCRIPT} ${FILESDIR}/compat_linux_test_project.sh ${DESTDIR}${PREFIX}/bin/compat_linux_test_project
+	${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
+		${DESTDIR}${PREFIX}/bin/compat_linux_test_project
+	cd ${WRKSRC}/${LTP_PREFIX} && \
+		pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
 
 .include "../../mk/bsd.pkg.mk"
