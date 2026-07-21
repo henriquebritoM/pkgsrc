@@ -15,7 +15,7 @@ set -e
 CALLING_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Directory where the script data is stored
-DATA_DIR="/var/db/compat_linux_test_project"
+DATA_DIR="/usr/pkg/libexec/compat_linux_test_project"
 
 # Directory where the LTP tests will be cloned
 LTP_DIR="${DATA_DIR}/ltp"
@@ -27,7 +27,7 @@ SYSCALL_DIR="${LTP_DIR}/testcases/kernel/syscalls"
 SYSCALL_NAME=""
 
 # Directory where compiled tests will be placed
-BINARIES_DIR="${DATA_DIR}/bin"
+BINARIES_DIR="${DATA_DIR}"
 export LTPROOT="${BINARIES_DIR}"
 export PATH="${PATH}:${BINARIES_DIR}/testcases/bin"
 
@@ -55,8 +55,9 @@ mount_ltp_dev() {
 
 	if ! [ "$(vnconfig -l ${BLK_DEV})" != "${BLK_DEV}: not in use" ]; then
 		# Stop early if the vnd target is already in use
-		echo "${BLK_DEV} is already in use. Cannot continue"
-		return
+		echo "${BLK_DEV} is already in use. Cannot continue" >&2
+		echo "Did you stop mid-test?" >&2
+		exit 1
 	else
 		# Mount the vnd if the target is free
 		vnconfig "${BLK_VND}" "${BLK_FILE}"
