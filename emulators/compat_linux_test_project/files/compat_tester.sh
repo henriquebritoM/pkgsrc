@@ -214,7 +214,7 @@ run_tests() {
 		run_test_for_all_syscalls
 	else
 		# User specified a syscall to test
-		syscall_list_parsed=$(parse_coma_separeted_list "${SYSCALLS_LIST}")
+		syscall_list_parsed=$(echo "${SYSCALLS_LIST}" | sed "s/,/ /g")
 	
 		set -- ${syscall_list_parsed} # word splitting is desired
 
