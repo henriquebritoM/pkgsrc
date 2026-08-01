@@ -29,9 +29,11 @@ INSTALLATION_DIRS=	bin ${LTP_PREFIX}
 GENERATE_PLIST+=	cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
 			find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
 
+.include "options.mk"
+
 do-build:
 	cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
-		--dest ${WRKSRC}/${LTP_PREFIX}
+		--dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
 
 do-install:
 	${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \

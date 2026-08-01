@@ -26,11 +26,31 @@ CC="/emul/linux/usr/bin/gcc-12"
 # Default is an empty string, which raises an error
 LTP_RELEASE=""
 
+# Available values: static dynamic
+# The way the testcases should be compiled
+LINK_MODE=""
+
+configure_static() {
+	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
+		CFLAGS="-pthread" LDFLAGS="-static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive"
+}
+
+configure_dynamic() {
+	./configure CC="${CC}" --prefix="${BINARIES_DIR}"
+}
+
 compile_setup() {
 	cd "${LTP_DIR}"
 
-	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
-		CFLAGS="-pthread" LDFLAGS="-static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive"
+	if [ "${LINK_MODE}" = "dynamic" ]; then
+		configure_dynamic 
+	elif [ "${LINK_MODE}" = "static" ]; then
+		configure_static 
+	else 
+		echo "Invalid link mode: \"${LINK_MODE}\"" >&2
+		exit 1
+	fi
+
 	gmake install -C "${LTP_DIR}/runtest" -j"$(sysctl -n hw.ncpu)"
 }
 
@@ -53,6 +73,9 @@ main() {
 		elif [ "${arg}" = "--dest" ]; then
 			shift
 			BINARIES_DIR="$1"
+		elif [ "${arg}" = "--link-mode" ]; then
+			shift 
+			LINK_MODE="$1"
 		else
 			echo "Invalid Option: '${arg}'" >&2
 			exit 1
