@@ -15,12 +15,13 @@ COMMENT=	Package to build and run the Linux Test Project tests on NetBSD
 
 NO_CONFIGURE=	YES
 
-ONLY_FOR_PLATFORM=	NetBSD-*-x86_64
-
 USE_TOOLS+=	gmake pkg-config
 
 BUILD_DEPENDS+=	suse_gcc12>=15.5:../../emulators/suse15_gcc12
 DEPENDS+=		e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
+
+EMUL_PLATFORMS=		linux-x86_64
+EMUL_REQD=		suse>=15.5
 
 LTP_PREFIX=	libexec/compat_linux_test_project
 

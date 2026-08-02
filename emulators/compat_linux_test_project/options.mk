@@ -9,5 +9,6 @@ PKG_SUGGESTED_OPTIONS=			dynamic
 LINK_MODE=	static
 .elif !empty(PKG_OPTIONS:Mdynamic)
 LINK_MODE=	dynamic
+EMUL_MODULES.linux=	base
 .endif
 
