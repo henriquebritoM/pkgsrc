@@ -1,45 +1,44 @@
 # $NetBSD$
+LTP_VERSION=    20260529
 
-CATEGORIES=	emulators
+PKGNAME=        compat_linux_test_project-${LTP_VERSION}-0.10
+CATEGORIES=     emulators
+MASTER_SITES=   ${MASTER_SITE_GITHUB:=linux-test-project/}ltp/releases/download/${LTP_VERSION}/
+DISTFILES=      ltp-full-${LTP_VERSION}.tar.xz
 
-LTP_VERSION=	20260529
-PKGNAME=	compat_linux_test_project-${LTP_VERSION}-0.10
+WRKSRC=         ${WRKDIR}/ltp-full-${LTP_VERSION}
 
-MASTER_SITES=	https://github.com/linux-test-project/ltp/releases/download/${LTP_VERSION}/
-DISTFILES=	ltp-full-${LTP_VERSION}.tar.xz
+MAINTAINER=     pkg-users@NetBSD.org
+COMMENT=        Package to build and run the Linux Test Project tests on NetBSD
+LICENSE=        2-clause-bsd
 
-WRKSRC=		${WRKDIR}/ltp-full-${LTP_VERSION}
+NO_CONFIGURE=   YES
 
-MAINTAINER=	pkg-users@NetBSD.org
-COMMENT=	Package to build and run the Linux Test Project tests on NetBSD
+USE_TOOLS+=     gmake pax pkg-config
 
-NO_CONFIGURE=	YES
+BUILD_DEPENDS+= suse_gcc12>=15.5:../../emulators/suse15_gcc12
+BUILD_DEPENDS+= pkgconf>=0.9:../../devel/pkgconf
+DEPENDS+=       e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
 
-USE_TOOLS+=	gmake pkg-config
+EMUL_PLATFORMS=         linux-x86_64
+EMUL_REQD+=             suse>=15.5
 
-BUILD_DEPENDS+=	suse_gcc12>=15.5:../../emulators/suse15_gcc12
-DEPENDS+=		e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
+LTP_PREFIX=     libexec/compat_linux_test_project
 
-EMUL_PLATFORMS=		linux-x86_64
-EMUL_REQD=		suse>=15.5
+INSTALLATION_DIRS=      bin ${LTP_PREFIX}
 
-LTP_PREFIX=	libexec/compat_linux_test_project
-
-INSTALLATION_DIRS=	bin ${LTP_PREFIX}
-
-GENERATE_PLIST+=	cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
-			find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
-
-.include "options.mk"
+GENERATE_PLIST+=        cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
+                        find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
 
 do-build:
-	cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
-		--dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
+        cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
+                --dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
 
 do-install:
-	${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
-		${DESTDIR}${PREFIX}/bin/compat_linux_test_project
-	cd ${WRKSRC}/${LTP_PREFIX} && \
-		pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
+        ${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
+                ${DESTDIR}${PREFIX}/bin/compat_linux_test_project
+        cd ${WRKSRC}/${LTP_PREFIX} && \
+                pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
 
+.include "options.mk"
 .include "../../mk/bsd.pkg.mk"
