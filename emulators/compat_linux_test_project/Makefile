@@ -41,4 +41,5 @@ do-install:
                 pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
 
 .include "options.mk"
+.include "../../devel/libtirpc/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
