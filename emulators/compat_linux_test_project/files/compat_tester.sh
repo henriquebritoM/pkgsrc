@@ -23,8 +23,6 @@ SYSCALLS_LIST=""
 
 # Directory where compiled tests will be placed
 BINARIES_DIR="${DATA_DIR}"
-export LTPROOT="${BINARIES_DIR}"
-export PATH="${PATH}:${BINARIES_DIR}/testcases/bin"
 
 # Directory where logs from tested syscalls are stored
 LOGS_DIR="${CALLING_DIR}/syscall_logs"
@@ -36,7 +34,17 @@ BLK_FILE="${DATA_DIR}/test.img"
 BLK_VND="vnd0"
 BLK_DEV="/dev/${BLK_VND}a"
 IS_BLK_MOUNTED=0
-export LTP_DEV="${BLK_DEV}"
+
+# LTP enviroment variable. 
+# used to trim the tests' outputs to a more 'reproducible' style
+LTP_REPRODUCIBLE_OUTPUT=0
+
+update_env_vars() {
+	export LTPROOT="${BINARIES_DIR}"
+	export PATH="${PATH}:${BINARIES_DIR}/testcases/bin"
+	export LTP_DEV="${BLK_DEV}"
+	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
+}
 
 if ! [ -e "${LOGS_DIR}" ]; then
 	mkdir "${LOGS_DIR}"
@@ -78,6 +86,12 @@ OPTIONS
 		though.
 		A single syscall can be passed, in this case, no commas should be used.
 	
+	-r, --reproducible
+		Sets the LTP enviroment variable LTP_REPRODUCIBLE_OUTPUT to 1.
+		According to LTP documentation, "suppress printing TINFO and TDEBUG
+		messages and discards the actual content of the other
+		messages printed by the test (suitable for a reproducible output)."
+
 	-h, --help
 		Shows this message
 EOF
@@ -249,6 +263,9 @@ main() {
 			-h|--help)
 				should_print_help_message=0
 				;;
+			-r|--reproducible)
+				LTP_REPRODUCIBLE_OUTPUT=1
+				;;
 			*)
 				echo "Invalid Option: '${arg}'" >&2
 				exit 1
@@ -261,6 +278,8 @@ main() {
 		print_help_message
 		return
 	fi
+
+	update_env_vars
 
 	run_tests
 }
