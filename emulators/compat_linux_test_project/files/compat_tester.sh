@@ -137,9 +137,25 @@ get_test_list() {
 
 	runtest_file="${BINARIES_DIR}/runtest/syscalls"
 
-	# Globs only the tests that have the syscall_name + number + Space
+	# Patterns to avoid matching syscalls with similar names
+	
+	# Case 1: there are syscalls variants (openat, openat2) and ltp puts the
+	# test number right after the syscall name
+	#
+	# Matches 2 numbers, followed by something that is not a number, ignoring
+	# "openat20x" when testing for 'openat'
+	regex_two_numbers="[0-9]{2}[^0-9]"
+	
+	# Case 2: there are syscalls variants (pipe, pipe2) and ltp puts an
+	# '_' between the syscall name and test number
+	#
+	# Matches an '_' followed by, at least, one number
+	# like pipe_01 and pipe2_01
+	regex_underline="_[0-9]+"
+
+	# Globs only the tests that have the syscall_name + number|_
 	# to avoid matching syscalls with similar name (like open & openat)
-	list="$(grep -E "^${syscall_name}[0-9_]* " "${runtest_file}")"
+	list="$(grep -E "^${syscall_name}(${regex_two_numbers}|${regex_underline})" "${runtest_file}")"
 
 	echo "${list}"
 }
