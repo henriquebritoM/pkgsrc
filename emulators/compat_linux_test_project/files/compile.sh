@@ -4,7 +4,6 @@
 #
 # 	Requirements:
 # 	- gmake
-# 	- pkg-config
 # 	- suse_gcc12-15.5
 # 	- module compat_linux enabled
 
@@ -30,13 +29,20 @@ LTP_RELEASE=""
 # The way the testcases should be compiled
 LINK_MODE=""
 
+# Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
+# into thinking there is an adequate pkg-config.
+# Compiling the syscalls testcases doesn't require the pkg-config, but 
+# 'configure' still stops if it cannot be found.
+
 configure_static() {
 	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
-		CFLAGS="-pthread" LDFLAGS="-static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive"
+		CFLAGS="-pthread" LDFLAGS="-static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive" \
+		PKG_CONFIG="/usr/bin/true"
 }
 
 configure_dynamic() {
-	./configure CC="${CC}" --prefix="${BINARIES_DIR}"
+	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
+		PKG_CONFIG="/usr/bin/true"
 }
 
 compile_setup() {

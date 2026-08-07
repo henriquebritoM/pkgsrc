@@ -14,10 +14,9 @@ LICENSE=        2-clause-bsd
 
 NO_CONFIGURE=   YES
 
-USE_TOOLS+=     gmake pax pkg-config
+USE_TOOLS+=     gmake pax
 
 BUILD_DEPENDS+= suse_gcc12>=15.5:../../emulators/suse15_gcc12
-BUILD_DEPENDS+= pkgconf>=0.9:../../devel/pkgconf
 DEPENDS+=       e2fsprogs-[0-9]*:../../sysutils/e2fsprogs
 
 EMUL_PLATFORMS=         linux-x86_64
@@ -41,5 +40,4 @@ do-install:
                 pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
 
 .include "options.mk"
-.include "../../devel/libtirpc/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
