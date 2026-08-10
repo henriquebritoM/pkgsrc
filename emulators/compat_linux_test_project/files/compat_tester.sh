@@ -25,7 +25,8 @@ SYSCALLS_LIST=""
 BINARIES_DIR="${DATA_DIR}"
 
 # Directory where logs from tested syscalls are stored
-LOGS_DIR="${CALLING_DIR}/syscall_logs"
+LOGS_DIR="${CALLING_DIR}"
+USER_DEFINED_LOGS_DIR=""
 
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
@@ -46,9 +47,26 @@ update_env_vars() {
 	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
 }
 
-if ! [ -e "${LOGS_DIR}" ]; then
-	mkdir "${LOGS_DIR}"
-fi
+# Takes one argument: base_dir_name
+# Loops through base_dir_name_1, base_dir_name_2, ..., base_dir_name_x until
+# it finds a unused name.
+next_unused_dir_name() {
+	base_dir_name="$1"
+
+	if [ ! -e "${base_dir_name}" ]; then
+		echo "${base_dir_name}"
+		echo "Primeiro if" >&2
+		return 0
+	fi
+
+	i=1
+
+	while [ -e "${base_dir_name}_${i}" ]; do
+		i=$((i + 1))
+	done
+
+	echo "${base_dir_name}_${i}"
+}
 
 print_help_message() {
 	cat << EOF
@@ -74,10 +92,14 @@ DESCRIPTION
 	logs. This also takes some time and is not recommended, except in some
 	niche cases.
 
+	All tests belong to Linux Testing Project, this package only ports them to
+	make they run on NetBSD. Support the Linux Test Project by checking their
+	official website: 
+
 OPTIONS
 	-d, --dir path
-		Specify a dir for storing the logs. Note that it will overwrite any
-		file with a conflicting name.
+		Specify a dir for storing the logs. Note that it will overwrite older
+		logs files in favor of newer ones.
 
 	-s, --syscall syscall1,syscall2,...
 		A comma separated list of which syscalls to test. 
@@ -129,6 +151,22 @@ is_empty_dir() {
 
 clean_logs() {
 	rm -rf "${LOGS_DIR:?}"/*
+}
+
+create_logs_dir() {
+	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
+		LOGS_DIR="${USER_DEFINED_LOGS_DIR}"
+
+	else
+		base_logs_dir="sys_logs"
+		base_logs_dir="$(next_unused_dir_name  ${base_logs_dir})"
+
+		LOGS_DIR="${LOGS_DIR}/${base_logs_dir}"
+	fi
+
+	if ! [ -e "${LOGS_DIR}" ]; then
+		mkdir "${LOGS_DIR}"
+	fi
 }
 
 # Gets the list of tests for a given syscall
@@ -238,7 +276,7 @@ run_test_for_all_syscalls() {
 run_tests() {
 
 	mount_ltp_dev
-
+	
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not tell which syscall to test. Test them all
 		run_test_for_all_syscalls
@@ -274,7 +312,7 @@ main() {
 				;;
 			-d|--output-dir)
 				shift # consumes the flag
-				CALLING_DIR="$1" # uses the next
+				USER_DEFINED_LOGS_DIR="$1" # uses the next
 				;;
 			-h|--help)
 				should_print_help_message=0
@@ -296,6 +334,8 @@ main() {
 	fi
 
 	update_env_vars
+
+	create_logs_dir 
 
 	run_tests
 }
