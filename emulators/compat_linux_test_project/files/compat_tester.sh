@@ -28,6 +28,10 @@ BINARIES_DIR="${DATA_DIR}"
 LOGS_DIR="${CALLING_DIR}"
 USER_DEFINED_LOGS_DIR=""
 
+# Directory where the baseline logs are stored
+# to be compared against
+BASELINE_LOGS_DIR=""
+
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
 # to pass through a enviroment variable
@@ -94,12 +98,17 @@ DESCRIPTION
 
 	All tests belong to Linux Testing Project, this package only ports them to
 	make they run on NetBSD. Support the Linux Test Project by checking their
-	official website: 
+	official website: https://github.com/linux-test-project/ltp
 
 OPTIONS
 	-d, --dir path
-		Specify a dir for storing the logs. Note that it will overwrite older
-		logs files in favor of newer ones.
+		Behavior depends on the mode the script is run in:
+ 
+		In test-run mode (default): path is the directory where
+		new logs are stored, overwriting any older logs already there.
+ 
+		In comparison mode (-c): path is the directory containing the
+		"current" set of logs to compare. Nothing is overwritten in this mode.
 
 	-s, --syscall syscall1,syscall2,...
 		A comma separated list of which syscalls to test. 
@@ -110,9 +119,42 @@ OPTIONS
 	
 	-r, --reproducible
 		Sets the LTP enviroment variable LTP_REPRODUCIBLE_OUTPUT to 1.
-		According to LTP documentation, "suppress printing TINFO and TDEBUG
-		messages and discards the actual content of the other
-		messages printed by the test (suitable for a reproducible output)."
+		According to LTP documentation, this "suppress printing TINFO and
+		TDEBUG messages and discards the actual content of the other messages
+		printed by the test (suitable for a reproducible output)."
+
+		This flag should be set if the logs are meant to be compared.
+	
+	-c, --compare-to[=logs_dir]
+		Compares two sets of logs, highlighting their differences. For a
+		consistent comparison, both sets os logs must have been gathered
+		using the 'reproducible' mode ('-r' flag).
+
+		If no directory is provided through 'logs_dir', the baseline shipped
+		with the package for the given NetBSD version is used to compare 
+		against. If a directory is passed, it is used instead of the baseline.
+
+		In both cases, the second set of logs to compare against the baseline
+		is taken from '-d' flag, if passed, or from the default 'sys_logs'
+		otherwise.
+
+		The comparison is done as follows:
+		Checks for tests that are new, tests that are no longer present,
+		and tests whose result changed. Changed results are further split
+		into regressions (e.g. PASS -> FAIL) and fixes (e.g. FAIL -> PASS). 
+
+		Each category is stored in its own subdirectory:
+			compared_logs/
+			├── fixed/
+			├── new/
+			├── regressed/
+			└── removed/
+
+	--fail-on-regression
+		Only meaningful together with -c.
+		When this flag is set, the script exits non-zero if any test is found 
+		in compared_logs/regressed/, so that automated callers.
+		Has no effect without -c.
 
 	-h, --help
 		Shows this message
@@ -298,9 +340,15 @@ run_tests() {
 	unmount_ltp_dev
 }
 
+compare_tests() {
+	echo "option not implemented yet"
+	return 0
+}
+
 main() {
 
 	should_print_help_message=1
+	compare_mode=1
 
 	while [ "$#" -gt 0 ]; do
 		arg="$1"
@@ -320,6 +368,17 @@ main() {
 			-r|--reproducible)
 				LTP_REPRODUCIBLE_OUTPUT=1
 				;;
+			--compare-to=*)
+				BASELINE_LOGS_DIR="${arg#--compare-to=}"
+				compare_mode=0
+				;;
+			-c=*)
+				BASELINE_LOGS_DIR="${arg#c=}"
+				compare_mode=0
+				;;
+			-c|--compare-to)
+				compare_mode=0
+				;;
 			*)
 				echo "Invalid Option: '${arg}'" >&2
 				exit 1
@@ -337,7 +396,11 @@ main() {
 
 	create_logs_dir 
 
-	run_tests
+	if [ "${compare_mode}" -eq 0 ]; then
+		compare_tests
+	else 
+		run_tests
+	fi
 }
 
 main "$@"
