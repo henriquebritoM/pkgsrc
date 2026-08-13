@@ -22,7 +22,14 @@ SYSCALL_NAME=""
 SYSCALLS_LIST=""
 
 # Directory where compiled tests will be placed
-BINARIES_DIR="${DATA_DIR}"
+BINARIES_DIR="${DATA_DIR}/testcases/bin"
+
+RUNTEST_DIR="${DATA_DIR}/runtest"
+
+# Index for helping with grouping testcases for syscall
+# LTP uses the file-tree to group them, but we do not have acces to the 
+# file-tree here
+INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 
 # Directory where logs from tested syscalls are stored
 LOGS_DIR="${CALLING_DIR}"
@@ -44,11 +51,27 @@ IS_BLK_MOUNTED=0
 # used to trim the tests' outputs to a more 'reproducible' style
 LTP_REPRODUCIBLE_OUTPUT=0
 
+# Recreation of the command and args used to run te script
+_SCRIPT_INVOCATION=""
+
 update_env_vars() {
-	export LTPROOT="${BINARIES_DIR}"
-	export PATH="${PATH}:${BINARIES_DIR}/testcases/bin"
+	export LTPROOT="${DATA_DIR}"
+	export PATH="${PATH}:${BINARIES_DIR}"
 	export LTP_DEV="${BLK_DEV}"
 	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
+}
+
+is_empty_dir() {
+	[ -z "$(ls -A "$1")" ]
+}
+
+quote_args() {
+	out=""
+	for a in "$@"; do
+		escaped=$(printf '%s' "$a" | sed "s/'/'\\\\''/g")
+		out="${out} '${escaped}'"
+	done
+	printf '%s' "${out# }"
 }
 
 # Takes one argument: base_dir_name
@@ -59,7 +82,6 @@ next_unused_dir_name() {
 
 	if [ ! -e "${base_dir_name}" ]; then
 		echo "${base_dir_name}"
-		echo "Primeiro if" >&2
 		return 0
 	fi
 
@@ -187,10 +209,6 @@ unmount_ltp_dev() {
 	fi
 }
 
-is_empty_dir() {
-	[ -z "$(ls -A "$1")" ]
-}
-
 clean_logs() {
 	rm -rf "${LOGS_DIR:?}"/*
 }
@@ -211,107 +229,99 @@ create_logs_dir() {
 	fi
 }
 
-# Gets the list of tests for a given syscall
-get_test_list() {
-	syscall_name="$1"
+# Header stores some useful data about the enviroment in which the tests
+# ran. It can be useful to track down issues:
+#
+# ---- compat_linux_test_project log header ----
+# date: Fri, 14 Aug 2026 00:09:27 +0000
+# netbsd_version: 11.0_RC5
+# netbsd_build: NetBSD 11.0_RC5 (GENERIC) #0: Tue Jun 16 15:48:07 UTC
+# 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+# arch: amd64
+# ltp_version: 20260529
+# script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r' '-s' 'readv,writev'"
+# syscall_tested: readv
+# reproducible: 1
+# --------------------------------------------------
+log_header() {
+	sys_filter="$1"
 
-	runtest_file="${BINARIES_DIR}/runtest/syscalls"
+	curr_date="$(date -uR)"
+	kernel_version="$(uname -r)"
+	kernel_build="$(uname -v)"
+	arch="$(uname -m)"
+	ltp_version="$(cat ${DATA_DIR}/ltp-version.txt)" 
 
-	# Patterns to avoid matching syscalls with similar names
+	cat << EOF
 	
-	# Case 1: there are syscalls variants (openat, openat2) and ltp puts the
-	# test number right after the syscall name
-	#
-	# Matches 2 numbers, followed by something that is not a number, ignoring
-	# "openat20x" when testing for 'openat'
-	regex_two_numbers="[0-9]{2}[^0-9]"
-	
-	# Case 2: there are syscalls variants (pipe, pipe2) and ltp puts an
-	# '_' between the syscall name and test number
-	#
-	# Matches an '_' followed by, at least, one number
-	# like pipe_01 and pipe2_01
-	regex_underline="_[0-9]+"
+---- compat_linux_test_project log header ----
+date: ${curr_date}
+netbsd_version: ${kernel_version}
+netbsd_build: ${kernel_build}
+arch: ${arch}
+ltp_version: ${ltp_version}
+script_invocation: "${_SCRIPT_INVOCATION}"
+syscall_tested: ${sys_filter}
+reproducible: ${LTP_REPRODUCIBLE_OUTPUT}
+--------------------------------------------------
 
-	# Globs only the tests that have the syscall_name + number|_
-	# to avoid matching syscalls with similar name (like open & openat)
-	list="$(grep -E "^${syscall_name}(${regex_two_numbers}|${regex_underline})" "${runtest_file}")"
-
-	echo "${list}"
+EOF
 }
 
-run_test_for_one_syscall() {
+# Runs a given testcase and outputs their result into the output file
+run_testcase() {
+	test_name="$1"
+	test_bin="$2"
+	test_args="$3"
+	output_file="$4"
+
+	set -- ${test_args} # word splitting is desired
+
+	{
+		echo "=================================================="
+		echo "   TEST: ${test_name}"
+		echo "=================================================="
+		echo ""
+	} >> "${output_file}"
+
+	echo "syscall_test: ${test_bin}"
+
+	"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
+}
+
+# Runs all testcases for a given syscall, if one provided as argument,
+# otherwise, goes through all syscalls and testcases listed in the index
+run_testcases() {
 	syscall="$1"
+	sys_filter="$(basename "${syscall}")" # name of the syscall passed
 
-	syscall_name="$(basename "${syscall}")"
+	bin_dir="${BINARIES_DIR}"
+	output_file="${LOGS_DIR}/${sys_filter}.txt"
+	runtest_syscalls_file="${RUNTEST_DIR}/syscalls"
 
-	bin_dir="${BINARIES_DIR}/testcases/bin"
-	output_file="${LOGS_DIR}/${syscall_name}"
+	cat "${INDEX_FILE}" | while read -r read_syscall_name testcases; do
 
-	# Cleans output_file
-	echo "" > "${output_file}"
+		# skipps the lines that do not match sys_filter, unless it is empty
+		if [ -n "${sys_filter}" ] && [ "${read_syscall_name}" != "${sys_filter}" ]; then
+			continue
+		fi
 
-	test_list="$(get_test_list "${syscall_name}")"
+		# Prints the header for the logs
+		# Clears the file if it was present
+		log_header "${sys_filter}" > "${output_file}"
 
-	# Iterate through the list of testcases.
-	# Parses the informationg provided by runtest/syscalls
-	echo "${test_list}" | while read -r test_name test_bin test_args; do
+		for testcase in ${testcases}; do
 
-		set -- ${test_args} # word splitting is desired
+			runtest_line="$(grep "^${testcase}[[:space:]]" "${runtest_syscalls_file}")"
 
-		{
-			echo "==================================================",
-			echo "   TEST: ${test_name}",
-			echo "==================================================",
-			echo "",
-		} >> "${output_file}"
+			set -- ${runtest_line} # word splitting is desired
 
-		echo "syscall_test: ${test_bin}"
-
-		"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
-
-	done
-}
-
-run_test_for_all_syscalls() {
-
-	runtest_file="${BINARIES_DIR}/runtest/syscalls"
-
-	# Iterate through the list of testcases.
-	# Parses the informationg provided by runtest/syscalls
-	cat "${runtest_file}" | while read -r test_name test_bin test_args; do
-
-		# skip comments and blank lines
-		case "${test_name}" in
-			''|'#'*) continue ;;
-		esac
-
-		# We cannot know the syscall name directly, this is an approximation
-		# using what the runtest file says. 
-		# The problem is that LTP is not 100% consistent with it's
-		# name convention, this is specially bad when syscalls have variants
-		# like clone & clone3 or fstat & fstat_64
-		syscall_name="${test_name%%[0-9]*}"
-
-		bin_dir="${BINARIES_DIR}/testcases/bin"
-		output_file="${LOGS_DIR}/${syscall_name}"
-
-		# Cleans output_file
-		echo "" > "${output_file}"
-
-		set -- ${test_args} # word splitting is desired
-
-		{
-			echo "==================================================",
-			echo "   TEST: ${test_name}",
-			echo "==================================================",
-			echo "",
-		} >> "${output_file}"
-
-		echo "syscall_test: ${test_bin}"
-
-		"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
-
+			test_name="$1"
+			test_bin="$2"
+			shift 2
+			
+			run_testcase "${test_name}" "${test_bin}" "$*" "${output_file}"
+		done
 	done
 }
 
@@ -321,9 +331,10 @@ run_tests() {
 	
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not tell which syscall to test. Test them all
-		run_test_for_all_syscalls
+		run_testcases 
 	else
-		# User specified a syscall to test
+		# User specified n syscalls to test
+		# Go through each one and test theit testcases
 		syscall_list_parsed=$(echo "${SYSCALLS_LIST}" | sed "s/,/ /g")
 	
 		set -- ${syscall_list_parsed} # word splitting is desired
@@ -331,7 +342,7 @@ run_tests() {
 		while [ "$#" -gt 0 ]; do
 			SYSCALL_NAME="$1"
 
-			run_test_for_one_syscall "${SYSCALL_NAME}"
+			run_testcases "${SYSCALL_NAME}"
 
 			shift
 		done
@@ -346,6 +357,7 @@ compare_tests() {
 }
 
 main() {
+	_SCRIPT_INVOCATION="$0 $(quote_args "$@")"
 
 	should_print_help_message=1
 	compare_mode=1
