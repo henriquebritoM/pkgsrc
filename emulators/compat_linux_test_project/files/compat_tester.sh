@@ -32,12 +32,16 @@ RUNTEST_DIR="${DATA_DIR}/runtest"
 INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 
 # Directory where logs from tested syscalls are stored
-LOGS_DIR="${CALLING_DIR}"
+LOGS_DIR="${CALLING_DIR}/sys_logs"
 USER_DEFINED_LOGS_DIR=""
 
 # Directory where the baseline logs are stored
 # to be compared against
-BASELINE_LOGS_DIR=""
+REFERENCE_LOGS_DIR=""
+USER_DEFINED_REFERENCE_DIR=""
+
+# Directory where results from comparisons are stored
+COMPARE_DIR="${CALLING_DIR}/diff_logs"
 
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
@@ -172,6 +176,7 @@ OPTIONS
 			├── regressed/
 			└── removed/
 
+
 	--fail-on-regression
 		Only meaningful together with -c.
 		When this flag is set, the script exits non-zero if any test is found 
@@ -218,14 +223,20 @@ create_logs_dir() {
 		LOGS_DIR="${USER_DEFINED_LOGS_DIR}"
 
 	else
-		base_logs_dir="sys_logs"
-		base_logs_dir="$(next_unused_dir_name  ${base_logs_dir})"
+		base_logs_dir="$(next_unused_dir_name  "sys_logs")"
 
-		LOGS_DIR="${LOGS_DIR}/${base_logs_dir}"
+		LOGS_DIR="${CALLING_DIR}/${base_logs_dir}"
 	fi
 
-	if ! [ -e "${LOGS_DIR}" ]; then
-		mkdir "${LOGS_DIR}"
+	mkdir -p "${LOGS_DIR}"
+}
+
+create_compare_dir() {
+
+	if [ -e "${COMPARE_DIR}" ]; then
+		diff_name="$(next_unused_dir_name  "diff_logs")"
+		COMPARE_DIR="${CALLING_DIR}/${diff_name}"
+		mkdir -p "${COMPARE_DIR}"
 	fi
 }
 
@@ -253,7 +264,6 @@ log_header() {
 	ltp_version="$(cat ${DATA_DIR}/ltp-version.txt)" 
 
 	cat << EOF
-	
 ---- compat_linux_test_project log header ----
 date: ${curr_date}
 netbsd_version: ${kernel_version}
@@ -273,16 +283,14 @@ run_testcase() {
 	test_name="$1"
 	test_bin="$2"
 	test_args="$3"
-	output_file="$4"
+
+	output_file="${syscall_dir}/${test_name}.log"
+
+	# Prints the header for the logs
+	# Clears the file if it was present
+	log_header "${sys_filter}" > "${output_file}"
 
 	set -- ${test_args} # word splitting is desired
-
-	{
-		echo "=================================================="
-		echo "   TEST: ${test_name}"
-		echo "=================================================="
-		echo ""
-	} >> "${output_file}"
 
 	echo "syscall_test: ${test_bin}"
 
@@ -296,19 +304,22 @@ run_testcases() {
 	sys_filter="$(basename "${syscall}")" # name of the syscall passed
 
 	bin_dir="${BINARIES_DIR}"
-	output_file="${LOGS_DIR}/${sys_filter}.txt"
 	runtest_syscalls_file="${RUNTEST_DIR}/syscalls"
 
-	cat "${INDEX_FILE}" | while read -r read_syscall_name testcases; do
+	cat "${INDEX_FILE}" | while read -r syscall_name testcases; do
 
 		# skipps the lines that do not match sys_filter, unless it is empty
-		if [ -n "${sys_filter}" ] && [ "${read_syscall_name}" != "${sys_filter}" ]; then
+		if [ -n "${sys_filter}" ] && [ "${syscall_name}" != "${sys_filter}" ]; then
 			continue
 		fi
 
-		# Prints the header for the logs
-		# Clears the file if it was present
-		log_header "${sys_filter}" > "${output_file}"
+		syscall_dir="${LOGS_DIR}/${syscall_name}"
+		# Clears previous logs, if any
+		if [ -e "${syscall_dir:?}" ]; then
+			rm "${syscall_dir:?}/*"
+		else 
+			mkdir -p "${syscall_dir}"
+		fi
 
 		for testcase in ${testcases}; do
 
@@ -320,7 +331,7 @@ run_testcases() {
 			test_bin="$2"
 			shift 2
 			
-			run_testcase "${test_name}" "${test_bin}" "$*" "${output_file}"
+			run_testcase "${test_name}" "${test_bin}" "$*"
 		done
 	done
 }
@@ -351,9 +362,125 @@ run_tests() {
 	unmount_ltp_dev
 }
 
+# Extracts the values of the results and returns them in a single line
+compare_extract_summary() {
+	file="$1"
+	awk '
+		/^passed[[:space:]]/   { passed = $2 }
+		/^failed[[:space:]]/   { failed = $2 }
+		/^broken[[:space:]]/   { broken = $2 }
+		/^skipped[[:space:]]/  { skipped = $2 }
+		/^warnings[[:space:]]/ { warnings = $2 }
+		END { print passed, failed, broken, skipped, warnings }
+	' "${file}"
+}
+
+
+compare_testcase() {
+	reference_file="$1"
+	current_file="$2"
+	syscall_name="$3"
+	testcase_name="$4"
+
+	# This testcase is not present in the reference logs, so it is 'new'
+	if [ ! -e "${reference_file}" ]; then
+		mkdir -p "${COMPARE_DIR}/new/${syscall_name}"
+
+		printf 'testcase: %s\n' "${testcase_name}" \
+			> "${COMPARE_DIR}/new/${syscall_name}/${testcase_name}.log"
+		return
+	fi
+
+	# This testcase is not present in the current logs, so it was 'removed'
+	if [ ! -e "${current_file}" ]; then
+		mkdir -p "${COMPARE_DIR}/removed/${syscall_name}"
+
+		printf 'testcase: %s\n' "${testcase_name}" \
+			> "${COMPARE_DIR}/removed/${syscall_name}/${testcase_name}.log"
+		return
+	fi
+
+	r_summary="$(compare_extract_summary "${reference_file}")"
+	c_summary="$(compare_extract_summary "${current_file}")"
+
+	# Nothing to when both testcases have the same output
+	[ "${r_summary}" = "${c_summary}" ] && return
+
+	# By 'bad', we mean the sum of the 'failed' + 'broken' fields
+	r_bad="$(printf '%s' "${r_summary}" | awk '{print $2+$3}')"
+	c_bad="$(printf '%s' "${c_summary}" | awk '{print $2+$3}')"
+
+	if [ "${c_bad}" -gt "${r_bad}" ]; then
+		category="regressed"
+	elif [ "${c_bad}" -lt "${r_bad}" ]; then
+		category="fixed"
+	else
+		# A testcase is marked as 'changed' when there is a difference in its
+		# 'skipped' or/and 'warnings' ltp fields
+		# We may want to look closer to why this happened
+		category="changed"
+	fi
+
+	mkdir -p "${COMPARE_DIR}/${category}/${syscall_name}"
+
+	{
+		printf 'testcase: %s\n' "${testcase_name}"
+		printf '  reference (passed failed broken skipped warnings): %s\n' "${r_summary}"
+		printf '  current   (passed failed broken skipped warnings): %s\n' "${c_summary}"
+	} > "${COMPARE_DIR}/${category}/${syscall_name}/${testcase_name}.log"
+}
+	
 compare_tests() {
-	echo "option not implemented yet"
-	return 0
+	current_logs_dir=""
+	reference_logs_dir=""
+
+	# Use default, unless user passed another dir as argument
+	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
+		current_logs_dir="${USER_DEFINED_LOGS_DIR}"
+	else 
+		current_logs_dir="${LOGS_DIR}"
+	fi
+
+	# Use default, unless user passed another dir as argument
+	if [ ! -z "${USER_DEFINED_REFERENCE_DIR}" ]; then
+		reference_logs_dir="${USER_DEFINED_REFERENCE_DIR}"
+	else 
+		reference_logs_dir=${REFERENCE_LOGS_DIR}
+	fi
+
+	# Cannot compare if one directory does not exist
+	if [ ! -e "${current_logs_dir}" ]; then
+		printf "Nothing to be compared, \'%s\' not found\n" "${current_logs_dir}" >&2
+		exit 1
+	elif [ ! -e "${reference_logs_dir}" ]; then
+		printf "Nothing to be compared, \'%s\' not found\n" "${reference_logs_dir}" >&2
+		exit 1
+	fi
+
+	create_compare_dir 
+
+	all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
+
+	for syscall in ${all_syscalls}; do
+
+		r_dir="${reference_logs_dir}/${syscall}"
+		c_dir="${current_logs_dir}/${syscall}"
+
+		# redirect the error logs to dev null, with this the user won't see
+		# anything if a syscall dir is empty. (In case of a new/remove syscall
+		# between the reference and the current logs)
+		all_testcases="$(\
+			(ls "${r_dir}" 2>/dev/null; ls "${c_dir}" 2>/dev/null) \
+			| sort -u)"
+
+		for tc_file in ${all_testcases}; do
+			testcase="${tc_file%.log}"
+
+			compare_testcase "${r_dir}/${tc_file}" "${c_dir}/${tc_file}" \
+				"${syscall}" "${testcase}"
+		done
+
+	done
 }
 
 main() {
@@ -372,7 +499,7 @@ main() {
 				;;
 			-d|--output-dir)
 				shift # consumes the flag
-				USER_DEFINED_LOGS_DIR="$1" # uses the next
+				USER_DEFINED_LOGS_DIR="${CALLING_DIR}/$1" # uses the next
 				;;
 			-h|--help)
 				should_print_help_message=0
@@ -381,11 +508,11 @@ main() {
 				LTP_REPRODUCIBLE_OUTPUT=1
 				;;
 			--compare-to=*)
-				BASELINE_LOGS_DIR="${arg#--compare-to=}"
+				USER_DEFINED_REFERENCE_DIR="${CALLING_DIR}/${arg#--compare-to=}"
 				compare_mode=0
 				;;
 			-c=*)
-				BASELINE_LOGS_DIR="${arg#c=}"
+				USER_DEFINED_REFERENCE_DIR="${CALLING_DIR}/${arg#-c=}"
 				compare_mode=0
 				;;
 			-c|--compare-to)
