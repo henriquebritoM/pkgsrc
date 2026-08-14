@@ -167,15 +167,19 @@ OPTIONS
 		The comparison is done as follows:
 		Checks for tests that are new, tests that are no longer present,
 		and tests whose result changed. Changed results are further split
-		into regressions (e.g. PASS -> FAIL) and fixes (e.g. FAIL -> PASS). 
+		into regressions (e.g. PASS -> FAIL), fixes (e.g. FAIL -> PASS) and
+		other changes (e.g. shift in skipped or warnings). 
 
-		Each category is stored in its own subdirectory:
+		Each category is stored in its own subdirectory, mirrorirng the
+		syscall/testcase layout of the compared logs:
 			compared_logs/
+			├── changed/
 			├── fixed/
 			├── new/
 			├── regressed/
 			└── removed/
-
+				└── syscall_a/
+					└── testcase01.log
 
 	--fail-on-regression
 		Only meaningful together with -c.
