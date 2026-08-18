@@ -553,7 +553,7 @@ compare_tests() {
 		# anything if a syscall dir is empty. (In case of a new/remove syscall
 		# between the reference and the current logs)
 		all_testcases="$(\
-            ( [ -d "${r_dir}" ] && ls "${r_dir}"; [ -d "${c_dir}" ] && ls "${c_dir}" ) \
+            (ls "${r_dir}" 2>/dev/null || true; ls "${c_dir}" 2>/dev/null || true) \
             | sort -u)"
 
 		for tc_file in ${all_testcases}; do
