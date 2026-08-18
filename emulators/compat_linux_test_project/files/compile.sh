@@ -31,8 +31,8 @@ LTP_RELEASE=""
 # The way the testcases should be compiled
 LINK_MODE=""
 
-CFLAGS="-Os -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables -fno-unwind-tables"
-LDFLAGS="-Wl,--gc-sections -s"
+CFLAGS="-Os -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-stack-protector"
+LDFLAGS=""
 
 # Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
 # into thinking there is an adequate pkg-config.
@@ -49,6 +49,9 @@ configure_static() {
 }
 
 configure_dynamic() {
+	CFLAGS="${CFLAGS} -ffunction-sections -fdata-sections"
+	LDFLAGS="${LDFLAGS} -Wl,--gc-sections -s"
+
 	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
  		CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" \
 		PKG_CONFIG="/usr/bin/true"
