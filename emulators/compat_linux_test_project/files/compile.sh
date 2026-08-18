@@ -31,19 +31,26 @@ LTP_RELEASE=""
 # The way the testcases should be compiled
 LINK_MODE=""
 
+CFLAGS="-Os -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables -fno-unwind-tables"
+LDFLAGS="-Wl,--gc-sections -s"
+
 # Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
 # into thinking there is an adequate pkg-config.
 # Compiling the syscalls testcases doesn't require the pkg-config, but 
 # 'configure' still stops if it cannot be found.
 
 configure_static() {
+	CFLAGS="${CFLAGS} -pthread"
+	LDFLAGS="${LDFLAGS} -static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive"
+
 	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
-		CFLAGS="-pthread" LDFLAGS="-static -L${LTP_DIR}/lib -Wl,--whole-archive -lpthread -Wl,--no-whole-archive" \
+		CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" \
 		PKG_CONFIG="/usr/bin/true"
 }
 
 configure_dynamic() {
 	./configure CC="${CC}" --prefix="${BINARIES_DIR}" \
+ 		CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}" \
 		PKG_CONFIG="/usr/bin/true"
 }
 
