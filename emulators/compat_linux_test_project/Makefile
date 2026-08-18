@@ -30,13 +30,14 @@ GENERATE_PLIST+=        cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
                         find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
 
 do-build:
-        cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
+		cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
                 --dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
+		${INSTALL_DATA} ${FILESDIR}/linux_config ${WRKSRC}/${LTP_PREFIX}/linux_config
 
 do-install:
-        ${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
+		${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
                 ${DESTDIR}${PREFIX}/bin/compat_linux_test_project
-        cd ${WRKSRC}/${LTP_PREFIX} && \
+		cd ${WRKSRC}/${LTP_PREFIX} && \
                 pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
 
 .include "options.mk"

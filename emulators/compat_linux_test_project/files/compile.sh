@@ -79,9 +79,26 @@ compile_tests() {
 	gmake install -C "${SYSCALL_DIR}/" -j"$(sysctl -n hw.ncpu)" CC="${CC}"
 }
 
-generate_syscall_index() {
+create_block_file() {
+	dd if=/dev/zero of="${BINARIES_DIR}/test.img" bs=1m count=512
+}
+
+# LTP has 2 runtest files related to syscalls, one generic and another only for
+# IPC related syscalls.
+# By joining them we can more easelly go throught both
+join_runstest_files() {
 	runtest_file="${RUNTEST_DIR}/syscalls"
+	runtest_file_ipc="${RUNTEST_DIR}/syscalls-ipc" # LTP has another file just for IPC
+
+	cat "${runtest_file}" > "${BINARIES_DIR}/syscalls-runtest"
+	cat "${runtest_file_ipc}" >> "${BINARIES_DIR}/syscalls-runtest"
+}
+
+generate_syscall_index() {
+	join_runstest_files 
+	
 	index_file="${BINARIES_DIR}/syscall-index.txt"
+	runtest_file="${BINARIES_DIR}/syscalls-runtest"
 
 	: > "${index_file}"
 
@@ -150,6 +167,7 @@ main() {
 	compile_setup
 	compile_tests
 
+	create_block_file
 	generate_syscall_index 
 	save_ltp_release 
 }

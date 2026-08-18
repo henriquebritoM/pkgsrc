@@ -24,12 +24,14 @@ SYSCALLS_LIST=""
 # Directory where compiled tests will be placed
 BINARIES_DIR="${DATA_DIR}/testcases/bin"
 
-RUNTEST_DIR="${DATA_DIR}/runtest"
-
 # Index for helping with grouping testcases for syscall
 # LTP uses the file-tree to group them, but we do not have acces to the 
 # file-tree here
 INDEX_FILE="${DATA_DIR}/syscall-index.txt"
+
+# File with both runtest entries for 'syscalls' and 'syscalls-ipc'
+# By joining them we can simplify work later, when iterating through them
+RUNTEST_JOIN_FILE="${DATA_DIR}/syscalls-runtest"
 
 # Directory where logs from tested syscalls are stored
 LOGS_DIR="${CALLING_DIR}/sys_logs"
@@ -64,6 +66,12 @@ IS_BLK_MOUNTED=0
 # used to trim the tests' outputs to a more 'reproducible' style
 LTP_REPRODUCIBLE_OUTPUT=0
 
+# Some tests use the kernel config file to perform checks for some features,
+# here, we use a custom file to tell the tests which features are present.
+# Note that the features is this file are not exaustive, so some tests may ask
+# for configuration not currentlu present in the file.
+KCONFIG_PATH="${DATA_DIR}/linux-config"
+
 # Recreation of the command and args used to run te script
 _SCRIPT_INVOCATION=""
 
@@ -72,6 +80,7 @@ update_env_vars() {
 	export PATH="${PATH}:${BINARIES_DIR}"
 	export LTP_DEV="${BLK_DEV}"
 	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
+	export KCONFIG_PATH="${KCONFIG_PATH}"
 }
 
 is_empty_dir() {
@@ -203,10 +212,6 @@ EOF
 
 mount_ltp_dev() {
 
-	if ! [ -e "${BLK_FILE}" ]; then
-		dd if=/dev/zero of="${DATA_DIR}"/test.img bs=1m count=512
-	fi
-
 	if [ "$(vnconfig -l ${BLK_VND})" != "${BLK_VND}: not in use" ]; then
 		# Stop early if the vnd target is already in use
 		echo "${BLK_VND} is already in use. Cannot continue" >&2
@@ -318,7 +323,7 @@ run_testcases() {
 	sys_filter="$(basename "${syscall}")" # name of the syscall passed
 
 	bin_dir="${BINARIES_DIR}"
-	runtest_syscalls_file="${RUNTEST_DIR}/syscalls"
+	runtest_syscalls_file="${RUNTEST_JOIN_FILE}"
 
 	cat "${INDEX_FILE}" | while read -r syscall_name testcases; do
 
