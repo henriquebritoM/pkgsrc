@@ -43,6 +43,15 @@ USER_DEFINED_REFERENCE_DIR=""
 # Directory where results from comparisons are stored
 COMPARE_DIR="${CALLING_DIR}/diff_logs"
 
+# How many lines the log header takes
+# They all should have the same size, as they are created in a static style
+# This may not be ideal, but there is no need to exchange this method with a 
+# runtime check
+HEADER_LENGTH=10
+
+# Script returns an error if the comparison found a change marked as 'regressions'
+FAIL_ON_REGRESSION=0
+
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
 # to pass through a enviroment variable
@@ -57,12 +66,6 @@ LTP_REPRODUCIBLE_OUTPUT=0
 
 # Recreation of the command and args used to run te script
 _SCRIPT_INVOCATION=""
-
-# How many lines the log header takes
-# They all should have the same size, as they are created in a static style
-# This may not be ideal, but there is no need to exchange this method with a 
-# runtime check
-HEADER_LENGTH=10
 
 update_env_vars() {
 	export LTPROOT="${DATA_DIR}"
@@ -601,7 +604,7 @@ main() {
 				compare_mode=0
 				;;
 			--fail-on-regression)
-
+				FAIL_ON_REGRESSION=1
 				;;
 			*)
 				echo "Invalid Option: '${arg}'" >&2
@@ -624,6 +627,18 @@ main() {
 		compare_tests
 	else 
 		run_tests
+	fi
+
+	if [ "${compare_mode}" -eq 0 ] && [ "${FAIL_ON_REGRESSION}" -eq 1 ]; then
+		regressions="$(find "${COMPARE_DIR}/regressed" -type f -name '*.log' 2>/dev/null | wc -l)"
+		if [ "${regressions}" -gt 0 ]; then
+			exit 1
+		fi
+	fi
+
+	if [ "${compare_mode}" -eq 1 ] && [ "${FAIL_ON_REGRESSION}" -eq 1 ]; then
+		echo "Flag 'FAIL_ON_REGRESSION' is being used outside comparison mode. \
+			This flag has no effect outside comparison mode"
 	fi
 }
 
