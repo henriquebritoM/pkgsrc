@@ -35,7 +35,7 @@ INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 LOGS_DIR="${CALLING_DIR}/sys_logs"
 USER_DEFINED_LOGS_DIR=""
 
-# Directory where the baseline logs are stored
+# Directory where the reference logs are stored
 # to be compared against
 REFERENCE_LOGS_DIR=""
 USER_DEFINED_REFERENCE_DIR=""
@@ -57,6 +57,12 @@ LTP_REPRODUCIBLE_OUTPUT=0
 
 # Recreation of the command and args used to run te script
 _SCRIPT_INVOCATION=""
+
+# How many lines the log header takes
+# They all should have the same size, as they are created in a static style
+# This may not be ideal, but there is no need to exchange this method with a 
+# runtime check
+HEADER_LENGTH=10
 
 update_env_vars() {
 	export LTPROOT="${DATA_DIR}"
@@ -156,11 +162,11 @@ OPTIONS
 		consistent comparison, both sets os logs must have been gathered
 		using the 'reproducible' mode ('-r' flag).
 
-		If no directory is provided through 'logs_dir', the baseline shipped
+		If no directory is provided through 'logs_dir', the reference shipped
 		with the package for the given NetBSD version is used to compare 
-		against. If a directory is passed, it is used instead of the baseline.
+		against. If a directory is passed, it is used instead of the reference.
 
-		In both cases, the second set of logs to compare against the baseline
+		In both cases, the second set of logs to compare against the reference
 		is taken from '-d' flag, if passed, or from the default 'sys_logs'
 		otherwise.
 
@@ -240,8 +246,9 @@ create_compare_dir() {
 	if [ -e "${COMPARE_DIR}" ]; then
 		diff_name="$(next_unused_dir_name  "diff_logs")"
 		COMPARE_DIR="${CALLING_DIR}/${diff_name}"
-		mkdir -p "${COMPARE_DIR}"
 	fi
+
+	mkdir -p "${COMPARE_DIR}"
 }
 
 # Header stores some useful data about the enviroment in which the tests
@@ -366,6 +373,74 @@ run_tests() {
 	unmount_ltp_dev
 }
 
+# Get the 'header' inside dir/*/*.log (does not check if it is, in fact, a log
+# header)
+get_representative_log() {
+	dir="$1"
+	find "${dir}" -mindepth 2 -maxdepth 2 -type f -name '*.log' | head -n 1
+}
+
+# Creates the header for the comparison
+# This header is made up of both headers from the reference and current sets of
+# logs, warnings, if both headers have some key different values and a brief
+# summary of the results.
+compare_create_header() {
+	reference_logs_dir="$1"
+	current_logs_dir="$2"
+
+	reference_sample="$(get_representative_log "${reference_logs_dir}")"
+	current_sample="$(get_representative_log "${current_logs_dir}")"
+
+	if [ -z "${current_sample}" ] || [ -z "${reference_sample}" ]; then
+		printf "Cannot build comparison summary: no log files found in one of the sets\n" >&2
+		exit 1
+	fi
+
+	current_header="$(head -n "${HEADER_LENGTH}" "${current_sample}")"
+	reference_header="$(head -n "${HEADER_LENGTH}" "${reference_sample}")"
+
+	{
+		printf '==================================================\n'
+		printf '   COMPARISON SUMMARY\n'
+		printf '==================================================\n\n'
+
+		printf 'reference set: %s \n' "${reference_logs_dir}"
+		printf '%s\n\n' "${reference_header}"
+
+		printf 'current set: %s \n' "${current_logs_dir}"
+		printf '%s\n\n' "${current_header}"
+	} > "${COMPARE_DIR}/summary.log"
+
+	# Checks for some fields that *may* be relevant (or even invalidate) some
+	# tests comparisons. Outputs a warning for them.
+	for field in netbsd_version arch ltp_version reproducible; do
+
+		reference_val="$(printf '%s\n' "${reference_header}" | sed -n "s/^${field}: //p")"
+		current_val="$(printf '%s\n' "${current_header}" | sed -n "s/^${field}: //p")"
+
+		if [ "${reference_val}" != "${current_val}" ]; then
+			printf 'WARNING: %s differs (reference: "%s", current: "%s")\n' \
+				"${field}" "${reference_val}" "${current_val}" >> "${COMPARE_DIR}/summary.log"
+		fi
+	done
+}
+
+# Counts how many cases were found for each comparison category
+compare_append_counts() {
+	{
+		printf '\n'
+		printf '==================================================\n'
+		printf '   RESULTS\n'
+		printf '==================================================\n'
+		printf '\n'
+
+		for category in regressed fixed changed new removed; do
+			count="$(find "${COMPARE_DIR}/${category}" -type f -name '*.log' 2>/dev/null | wc -l)"
+			printf '%-10s %s\n' "${category}:" "${count}"
+		done
+	} >> "${COMPARE_DIR}/summary.log"
+}
+
 # Extracts the values of the results and returns them in a single line
 compare_extract_summary() {
 	file="$1"
@@ -462,6 +537,7 @@ compare_tests() {
 	fi
 
 	create_compare_dir 
+	compare_create_header "${reference_logs_dir}" "${current_logs_dir}"
 
 	all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
 
@@ -474,8 +550,8 @@ compare_tests() {
 		# anything if a syscall dir is empty. (In case of a new/remove syscall
 		# between the reference and the current logs)
 		all_testcases="$(\
-			(ls "${r_dir}" 2>/dev/null; ls "${c_dir}" 2>/dev/null) \
-			| sort -u)"
+            ( [ -d "${r_dir}" ] && ls "${r_dir}"; [ -d "${c_dir}" ] && ls "${c_dir}" ) \
+            | sort -u)"
 
 		for tc_file in ${all_testcases}; do
 			testcase="${tc_file%.log}"
@@ -485,6 +561,8 @@ compare_tests() {
 		done
 
 	done
+
+	compare_append_counts 
 }
 
 main() {
@@ -521,6 +599,9 @@ main() {
 				;;
 			-c|--compare-to)
 				compare_mode=0
+				;;
+			--fail-on-regression)
+
 				;;
 			*)
 				echo "Invalid Option: '${arg}'" >&2
