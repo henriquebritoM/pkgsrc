@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#	run LTP syscall testes on NetBSD, using Compat Linux
+#	Run LTP syscall tests on NetBSD, using Compat Linux
 #
 # 	Requirements:
 # 	- e2fsprogs (for ext* testing)
@@ -14,10 +14,10 @@ CALLING_DIR="$(pwd)"
 # Directory where the script data is stored
 DATA_DIR="/usr/pkg/libexec/compat_linux_test_project"
 
-# Optional: Used to specify one syscalls subdirectory inside SYSCALL_DIR
+# Optional: Used to specify one syscall subdirectory inside SYSCALL_DIR
 SYSCALL_NAME=""
 
-# Optional: A coma separated list of which syscalls to test. Should be parsed
+# Optional: A comma-separated list of which syscalls to test. Should be parsed
 # into individual SYSCALL_NAME
 SYSCALLS_LIST=""
 
@@ -25,7 +25,7 @@ SYSCALLS_LIST=""
 BINARIES_DIR="${DATA_DIR}/testcases/bin"
 
 # Index for helping with grouping testcases for syscall
-# LTP uses the file-tree to group them, but we do not have acces to the 
+# LTP uses the file-tree to group them, but we do not have access to the 
 # file-tree here
 INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 
@@ -62,17 +62,17 @@ BLK_VND="vnd0"
 BLK_DEV="/dev/${BLK_VND}a"
 IS_BLK_MOUNTED=0
 
-# LTP enviroment variable. 
+# LTP environment variable. 
 # used to trim the tests' outputs to a more 'reproducible' style
 LTP_REPRODUCIBLE_OUTPUT=0
 
-# Some tests use the kernel config file to perform checks for some features,
-# here, we use a custom file to tell the tests which features are present.
-# Note that the features is this file are not exaustive, so some tests may ask
-# for configuration not currentlu present in the file.
+# Some tests use the kernel config file to perform checks for some features.
+# Here, we use a custom file to tell the tests which features are present.
+# Note that the features is this file are not exhaustive, so some tests may ask
+# for configuration not currently present in the file.
 KCONFIG_PATH="${DATA_DIR}/linux-config"
 
-# Recreation of the command and args used to run te script
+# Recreation of the command and args used to run the script
 _SCRIPT_INVOCATION=""
 
 update_env_vars() {
@@ -125,24 +125,25 @@ SYNOPSIS
 	compat_linux_test_project [options]
 
 DESCRIPTION
-	compat_linux_test_project is a package to download, build, and run the 
-	Linux Test Project (LTP) test suite on NetBSD, intended for testing the
-	compat_linux compatibility layer.
+	compat_linux_test_project is a package to download, build, and run
+	the Linux Test Project (LTP) test suite on NetBSD, intended for
+	testing	the compat_linux compatibility layer.
 
 	It automates fetching, building, and executing LTP tests, helping
 	to identify missing syscalls, behavioral differences, and other
 	issues in NetBSD's Linux compatibility subsystem.
 
-	If no --syscall option is passed, the default behavior is to test every
-	possible syscall. This uses the LTP runtest/syscalls file to determine what
-	to test and in which order. This means that the syscall name cannot be
-	correclty determined sometimes, resulting in some not ideal behavior in the
-	logs. This also takes some time and is not recommended, except in some
-	niche cases.
+	If no --syscall option is passed, the default behavior is to test
+	every possible syscall. This uses the LTP runtest/syscalls file to
+	determine what to test and in which order. This means that the syscall
+	name cannot be correctly-determined sometimes, resulting in suboptimal
+	output in the logs. This also takes some time and is not
+	recommended, except in some niche cases.
 
-	All tests belong to Linux Testing Project, this package only ports them to
-	make they run on NetBSD. Support the Linux Test Project by checking their
-	official website: https://github.com/linux-test-project/ltp
+	All tests belong to Linux Testing Project, this package only ports
+	them to	make them run on NetBSD. Support the Linux Test Project by
+	checking their official website:
+		https://github.com/linux-test-project/ltp
 
 OPTIONS
 	-d, --dir path
@@ -152,57 +153,61 @@ OPTIONS
 		new logs are stored, overwriting any older logs already there.
  
 		In comparison mode (-c): path is the directory containing the
-		"current" set of logs to compare. Nothing is overwritten in this mode.
+		"current" set of logs to compare. Nothing is overwritten in
+		this mode.
 
-	-s, --syscall syscall1,syscall2,...
-		A comma separated list of which syscalls to test. 
-		The script will search for them using the LTP runtest file, so the name
-		may be slightly different from the syscall name. This is unusual,
-		though.
-		A single syscall can be passed, in this case, no commas should be used.
+	-s, --syscall syscall1[,syscall2,...]
+		A comma-separated list of which syscalls to test. 
+		The script will search for them using the LTP runtest file,
+		so the name may be slightly different from the syscall name
+		(though this is unusual).
 	
 	-r, --reproducible
 		Sets the LTP enviroment variable LTP_REPRODUCIBLE_OUTPUT to 1.
-		According to LTP documentation, this "suppress printing TINFO and
-		TDEBUG messages and discards the actual content of the other messages
-		printed by the test (suitable for a reproducible output)."
+		According to LTP documentation, this "suppress printing TINFO
+		and TDEBUG messages and discards the actual content of the
+		other messages printed by the test (suitable for a
+		reproducible output)."
 
 		This flag should be set if the logs are meant to be compared.
 	
 	-c, --compare-to[=logs_dir]
-		Compares two sets of logs, highlighting their differences. For a
-		consistent comparison, both sets os logs must have been gathered
-		using the 'reproducible' mode ('-r' flag).
+		Compares two sets of logs, highlighting their differences. For
+		a consistent comparison, both sets of logs must have been
+		created using the 'reproducible' mode ('-r' flag).
 
-		If no directory is provided through 'logs_dir', the reference shipped
-		with the package for the given NetBSD version is used to compare 
-		against. If a directory is passed, it is used instead of the reference.
+		If no directory is provided through 'logs_dir', the reference
+		shipped	with the package for the given NetBSD version is used
+		to compare against. If a directory is passed, it is used
+		instead of the reference.
 
-		In both cases, the second set of logs to compare against the reference
-		is taken from '-d' flag, if passed, or from the default 'sys_logs'
-		otherwise.
+		In both cases, the second set of logs to compare against the
+		reference is taken from '-d' flag, if passed, or from the
+		default 'sys_logs' otherwise.
 
 		The comparison is done as follows:
-		Checks for tests that are new, tests that are no longer present,
-		and tests whose result changed. Changed results are further split
-		into regressions (e.g. PASS -> FAIL), fixes (e.g. FAIL -> PASS) and
-		other changes (e.g. shift in skipped or warnings). 
+		Checks for tests that are new, tests that are no longer
+		present, and tests whose result changed. Changed results are
+		further split into regressions (e.g. PASS -> FAIL), fixes
+		(e.g. FAIL -> PASS) and	other changes (e.g. shift in skipped
+		or warnings). 
 
-		Each category is stored in its own subdirectory, mirrorirng the
+		Each category is stored in its own subdirectory, mirroring the
 		syscall/testcase layout of the compared logs:
 			compared_logs/
-			├── changed/
-			├── fixed/
-			├── new/
-			├── regressed/
-			└── removed/
-				└── syscall_a/
-					└── testcase01.log
+			|-- changed/
+			|-- fixed/
+			|-- new/
+			|-- regressed/
+			|-- removed/
+			    |-- syscall_a/
+			        |- testcase01.log
 
 	--fail-on-regression
 		Only meaningful together with -c.
-		When this flag is set, the script exits non-zero if any test is found 
-		in compared_logs/regressed/, so that automated callers.
+		When this flag is set, the script exits with a non-zero status
+		if any test is found in compared_logs/regressed/. This is
+		intended for use by automated testing.
 		Has no effect without -c.
 
 	-h, --help
@@ -316,8 +321,8 @@ run_testcase() {
 	"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
 }
 
-# Runs all testcases for a given syscall, if one provided as argument,
-# otherwise, goes through all syscalls and testcases listed in the index
+# Runs all testcases for a given syscall, if one provided as argument.
+# Otherwise, goes through all syscalls and testcases listed in the index
 run_testcases() {
 	syscall="$1"
 	sys_filter="$(basename "${syscall}")" # name of the syscall passed
@@ -344,7 +349,7 @@ run_testcases() {
 
 			runtest_line="$(grep "^${testcase}[[:space:]]" "${runtest_syscalls_file}")"
 
-			set -- ${runtest_line} # word splitting is desired
+			set -- ${runtest_line} # word-splitting is desired
 
 			test_name="$1"
 			test_bin="$2"
@@ -360,14 +365,14 @@ run_tests() {
 	mount_ltp_dev
 	
 	if [ -z "${SYSCALLS_LIST}" ]; then
-		# user did not tell which syscall to test. Test them all
+		# user did not specify which syscall to test. Test them all
 		run_testcases 
 	else
-		# User specified n syscalls to test
-		# Go through each one and test theit testcases
+		# User specified syscalls to test
+		# Go through each one and test their testcases
 		syscall_list_parsed=$(echo "${SYSCALLS_LIST}" | sed "s/,/ /g")
 	
-		set -- ${syscall_list_parsed} # word splitting is desired
+		set -- ${syscall_list_parsed} # word-splitting is desired
 
 		while [ "$#" -gt 0 ]; do
 			SYSCALL_NAME="$1"
@@ -390,8 +395,8 @@ get_representative_log() {
 
 # Creates the header for the comparison
 # This header is made up of both headers from the reference and current sets of
-# logs, warnings, if both headers have some key different values and a brief
-# summary of the results.
+# logs, warnings, whether both headers have some key different values and a
+# brief summary of the results.
 compare_create_header() {
 	reference_logs_dir="$1"
 	current_logs_dir="$2"
@@ -554,7 +559,7 @@ compare_tests() {
 		r_dir="${reference_logs_dir}/${syscall}"
 		c_dir="${current_logs_dir}/${syscall}"
 
-		# redirect the error logs to dev null, with this the user won't see
+		# redirect the error logs to /dev/null. With this, the user won't see
 		# anything if a syscall dir is empty. (In case of a new/remove syscall
 		# between the reference and the current logs)
 		all_testcases="$(\
