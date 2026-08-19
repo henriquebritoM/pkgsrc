@@ -59,8 +59,7 @@ FAIL_ON_REGRESSION=0
 # to pass through a enviroment variable
 BLK_FILE="${DATA_DIR}/test.img"
 BLK_VND="vnd0"
-BLK_DEV="/dev/${BLK_VND}a"
-IS_BLK_MOUNTED=0
+BLK_DEV="/dev/r${BLK_VND}d"
 
 # LTP environment variable. 
 # used to trim the tests' outputs to a more 'reproducible' style
@@ -72,6 +71,13 @@ LTP_REPRODUCIBLE_OUTPUT=0
 # for configuration not currently present in the file.
 KCONFIG_PATH="${DATA_DIR}/linux-config"
 
+# Some testcases verify if the operations were finished under
+# a timer treshold. The LTP way of detecting if the system is
+# a VM does not work os NetBSD.
+# With this setting, we tell LTP to not check the tests against
+# timers.
+LTP_VIRT_OVERRIDE="kvm"
+
 # Recreation of the command and args used to run the script
 _SCRIPT_INVOCATION=""
 
@@ -81,6 +87,7 @@ update_env_vars() {
 	export LTP_DEV="${BLK_DEV}"
 	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
 	export KCONFIG_PATH="${KCONFIG_PATH}"
+	export LTP_VIRT_OVERRIDE="${LTP_VIRT_OVERRIDE}"
 }
 
 is_empty_dir() {
@@ -203,6 +210,11 @@ OPTIONS
 			    |-- syscall_a/
 			        |- testcase01.log
 
+		The comparison assumes the testcases output follows the 
+		standard and new LTP strucuture. This is not true for every
+		testcase, in this case, the comparison has undefined 
+		behaviour.
+
 	--fail-on-regression
 		Only meaningful together with -c.
 		When this flag is set, the script exits with a non-zero status
@@ -225,16 +237,12 @@ mount_ltp_dev() {
 	else
 		# Mount the vnd if the target is free
 		vnconfig "${BLK_VND}" "${BLK_FILE}"
-		IS_BLK_MOUNTED=1 # Mark that we mounted
 	fi
 }
 
 unmount_ltp_dev() {
 	# checks if the vnd was mounted by the script
-	if [ "${IS_BLK_MOUNTED}" -eq 1 ]; then
-		vnconfig -u "${BLK_VND}"
-		IS_BLK_MOUNTED=0
-	fi
+	vnconfig -u "${BLK_VND}"
 }
 
 clean_logs() {
@@ -321,6 +329,32 @@ run_testcase() {
 	"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
 }
 
+check_for_testcase_issue() {
+	syscall_name="$1"
+
+	case "${syscall_name}" in
+		# causes kernel panic
+		rt_sigqueueinfo)
+			return 1
+			;;
+		# causes kernel panic
+		copy_file_range)
+			return 1
+			;;
+		# Does not finish
+		sigprocmask)
+			return 1
+			;;
+		# Does not finish
+		sigrelse)
+			return 1
+			;;
+		*)
+			return 0
+			;;
+	esac
+}
+
 # Runs all testcases for a given syscall, if one provided as argument.
 # Otherwise, goes through all syscalls and testcases listed in the index
 run_testcases() {
@@ -334,6 +368,11 @@ run_testcases() {
 
 		# skipps the lines that do not match sys_filter, unless it is empty
 		if [ -n "${sys_filter}" ] && [ "${syscall_name}" != "${sys_filter}" ]; then
+			continue
+		fi
+
+		# skipps tests that are known to cause issues
+		if ! check_for_testcase_issue "${syscall_name}"; then
 			continue
 		fi
 
@@ -575,7 +614,8 @@ compare_tests() {
 
 	done
 
-	compare_append_counts 
+	compare_append_counts
+	cat "${COMPARE_DIR}/summary.log"
 }
 
 main() {
