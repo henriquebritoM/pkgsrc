@@ -1,0 +1,18 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:14:13 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+renameat201    0  TINFO  :  Using /tmp/LTP_renENzKR4 as tmpdir (tmpfs filesystem)
+renameat201    1  TFAIL  :  renameat201.c:159: renameat2() got unexpected return value: expected: 17 - EEXIST: TEST_ERRNO=EOPNOTSUPP(95): Operation not supported
+renameat201    2  TFAIL  :  renameat201.c:149: renameat2() failed unexpectedly: TEST_ERRNO=EOPNOTSUPP(95): Operation not supported
+renameat201    3  TFAIL  :  renameat201.c:159: renameat2() got unexpected return value: expected: 2 - ENOENT: TEST_ERRNO=EOPNOTSUPP(95): Operation not supported
+renameat201    4  TFAIL  :  renameat201.c:149: renameat2() failed unexpectedly: TEST_ERRNO=EOPNOTSUPP(95): Operation not supported
+renameat201    5  TPASS  :  renameat2() returned the expected value: TEST_ERRNO=EINVAL(22): Invalid argument
+renameat201    6  TPASS  :  renameat2() returned the expected value: TEST_ERRNO=EINVAL(22): Invalid argument

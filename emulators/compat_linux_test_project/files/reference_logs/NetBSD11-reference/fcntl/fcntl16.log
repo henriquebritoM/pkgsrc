@@ -1,0 +1,21 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:04:21 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+fcntl16     0  TINFO  :  Using /tmp/LTP_fcnNIe6OC as tmpdir (tmpfs filesystem)
+fcntl16     0  TINFO  :  Entering block 1
+fcntl16     0  TINFO  :  Test case 1: without manadatory locking PASSED
+fcntl16     0  TINFO  :  Exiting block 1
+fcntl16     0  TINFO  :  Entering block 2
+fcntl16     0  TINFO  :  Test case 2: with mandatory record locking PASSED
+fcntl16     0  TINFO  :  Exiting block 2
+fcntl16     0  TINFO  :  Entering block 3
+fcntl16     0  TINFO  :  Test case 3: mandatory locking with NODELAY PASSED
+fcntl16     0  TINFO  :  Exiting block 3

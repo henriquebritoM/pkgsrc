@@ -1,0 +1,43 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:03:09 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+tst_kconfig.c:42: TWARN: 
+tst_fd.c:125: TCONF: 
+tst_fd.c:144: TCONF: 
+tst_fd.c:151: TCONF: 
+tst_fd.c:170: TCONF: 
+tst_fd.c:188: TCONF: 
+tst_fd.c:199: TCONF: 
+tst_fd.c:215: TCONF: 
+tst_fd.c:224: TCONF: 
+tst_fd.c:233: TCONF: 
+tst_fd.c:242: TCONF: 
+tst_fd.c:260: TCONF: 
+epoll_pwait06.c:64: TPASS: 
+tst_fd.c:125: TCONF: 
+tst_fd.c:144: TCONF: 
+tst_fd.c:151: TCONF: 
+tst_fd.c:170: TCONF: 
+tst_fd.c:188: TCONF: 
+tst_fd.c:199: TCONF: 
+tst_fd.c:215: TCONF: 
+tst_fd.c:224: TCONF: 
+tst_fd.c:233: TCONF: 
+tst_fd.c:242: TCONF: 
+tst_fd.c:260: TCONF: 
+epoll_pwait06.c:64: TPASS: 
+
+Summary:
+passed   2
+failed   0
+broken   0
+skipped  22
+warnings 1

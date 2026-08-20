@@ -31,8 +31,11 @@ GENERATE_PLIST+=        cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
 
 do-build:
 		cd ${WRKSRC} && ${SH} ${FILESDIR}/compile.sh --ltp-version ${LTP_VERSION} \
-                --dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
+			--dest ${WRKSRC}/${LTP_PREFIX} --link-mode "${LINK_MODE}"
 		${INSTALL_DATA} ${FILESDIR}/linux_config ${WRKSRC}/${LTP_PREFIX}/linux_config
+		mkdir -p ${WRKSRC}/${LTP_PREFIX}/reference_logs/reference
+		cd ${FILESDIR}/reference_logs/NetBSD11-reference && \
+			pax -rw . ${WRKSRC}/${LTP_PREFIX}/reference_logs/reference
 
 do-install:
 		${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \

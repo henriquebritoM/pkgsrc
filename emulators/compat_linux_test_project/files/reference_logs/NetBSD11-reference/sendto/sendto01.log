@@ -1,0 +1,21 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:18:21 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+sendto01    1  TPASS  :  bad file descriptor successful
+sendto01    2  TPASS  :  invalid socket successful
+sendto01    3  TPASS  :  invalid send buffer successful
+sendto01    4  TPASS  :  connected TCP successful
+sendto01    5  TFAIL  :  sendto01.c:329: not connected TCP ; returned -1 (expected -1), errno 107 (expected 32)
+sendto01    6  TPASS  :  invalid to buffer length successful
+sendto01    7  TPASS  :  invalid to buffer successful
+sendto01    8  TPASS  :  UDP message too big successful
+sendto01    9  TPASS  :  local endpoint shutdown successful
+sendto01   10  TPASS  :  invalid flags set successful

@@ -1,0 +1,34 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:10:07 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+linkat01    0  TINFO  :  Using /tmp/LTP_linycgGKX as tmpdir (tmpfs filesystem)
+linkat01    1  TPASS  :  linkat is functionality correct
+linkat01    2  TPASS  :  linkat succeeded as expected
+linkat01    3  TPASS  :  linkat is functionality correct
+linkat01    4  TPASS  :  linkat is functionality correct
+linkat01    5  TPASS  :  linkat is functionality correct
+linkat01    6  TPASS  :  linkat succeeded as expected
+linkat01    7  TPASS  :  linkat is functionality correct
+linkat01    8  TFAIL  :  linkat01.c:276: linkat failed unexpectedly; expected 20 - Not a directory: TEST_ERRNO=EINVAL(22): Invalid argument
+linkat01    9  TFAIL  :  linkat01.c:276: linkat failed unexpectedly; expected 20 - Not a directory: TEST_ERRNO=EINVAL(22): Invalid argument
+linkat01   10  TPASS  :  linkat succeeded as expected
+linkat01   11  TPASS  :  linkat is functionality correct
+linkat01   12  TPASS  :  linkat failed as expected: TEST_ERRNO=EBADF(9): Bad file descriptor
+linkat01   13  TPASS  :  linkat failed as expected: TEST_ERRNO=EBADF(9): Bad file descriptor
+linkat01   14  TPASS  :  linkat succeeded as expected
+linkat01   15  TPASS  :  linkat is functionality correct
+linkat01   16  TPASS  :  linkat failed as expected: TEST_ERRNO=ENOENT(2): No such file or directory
+linkat01   17  TPASS  :  linkat failed as expected: TEST_ERRNO=ENOENT(2): No such file or directory
+linkat01   18  TPASS  :  linkat succeeded as expected
+linkat01   19  TPASS  :  linkat is functionality correct
+linkat01   20  TPASS  :  linkat failed as expected: TEST_ERRNO=EXDEV(18): Invalid cross-device link
+linkat01   21  TPASS  :  linkat failed as expected: TEST_ERRNO=EPERM(1): Operation not permitted
+linkat01   22  TFAIL  :  linkat01.c:274: linkat succeeded unexpectedly

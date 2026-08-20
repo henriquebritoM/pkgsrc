@@ -1,0 +1,16 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:18:21 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+setfsuid04    0  TINFO  :  Using /tmp/LTP_setdN5h7o as tmpdir (tmpfs filesystem)
+setfsuid04    1  TBROK  :  tst_sig.c:232: unexpected signal SIGSYS/SIGUNUSED(31) received (pid = 24208).
+setfsuid04    2  TBROK  :  tst_sig.c:232: Remaining cases broken
+setfsuid04    0  TINFO  :  Child process returned TBROK
+setfsuid04    0  TWARN  :  tst_tmpdir.c:339: tst_rmdir: rmobj(/tmp/LTP_setdN5h7o) failed: unlinkat(/tmp/LTP_setdN5h7o) failed; errno=2: ENOENT

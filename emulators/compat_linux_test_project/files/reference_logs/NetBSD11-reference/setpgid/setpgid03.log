@@ -1,0 +1,24 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:18:21 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+tst_kconfig.c:42: TWARN: 
+setpgid03.c:43: TPASS: 
+setpgid03.c:45: TFAIL: 
+tst_kconfig.c:42: TWARN: KCONFIG_PATH='/usr/pkg/libexec/compat_linux_test_project/linux-config' does not exist
+tst_kconfig.c:73: TINFO: Couldn't locate kernel config!
+setpgid03.c:56: TPASS: 
+
+Summary:
+passed   2
+failed   1
+broken   0
+skipped  0
+warnings 2

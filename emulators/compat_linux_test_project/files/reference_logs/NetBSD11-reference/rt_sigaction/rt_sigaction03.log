@@ -1,0 +1,353 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:14:13 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+rt_sigaction03    0  TINFO  :  Using /tmp/LTP_rt_3zCEHw as tmpdir (tmpfs filesystem)
+rt_sigaction03    0  TINFO  :  Signal 34
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    1  TPASS  :  rt_sigaction03 failure with sig: 34 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03    2  TPASS  :  rt_sigaction03 failure with sig: 34 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    3  TPASS  :  rt_sigaction03 failure with sig: 34 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    4  TPASS  :  rt_sigaction03 failure with sig: 34 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03    5  TPASS  :  rt_sigaction03 failure with sig: 34 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 35
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    6  TPASS  :  rt_sigaction03 failure with sig: 35 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03    7  TPASS  :  rt_sigaction03 failure with sig: 35 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    8  TPASS  :  rt_sigaction03 failure with sig: 35 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03    9  TPASS  :  rt_sigaction03 failure with sig: 35 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   10  TPASS  :  rt_sigaction03 failure with sig: 35 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 36
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   11  TPASS  :  rt_sigaction03 failure with sig: 36 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   12  TPASS  :  rt_sigaction03 failure with sig: 36 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   13  TPASS  :  rt_sigaction03 failure with sig: 36 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   14  TPASS  :  rt_sigaction03 failure with sig: 36 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   15  TPASS  :  rt_sigaction03 failure with sig: 36 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 37
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   16  TPASS  :  rt_sigaction03 failure with sig: 37 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   17  TPASS  :  rt_sigaction03 failure with sig: 37 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   18  TPASS  :  rt_sigaction03 failure with sig: 37 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   19  TPASS  :  rt_sigaction03 failure with sig: 37 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   20  TPASS  :  rt_sigaction03 failure with sig: 37 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 38
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   21  TPASS  :  rt_sigaction03 failure with sig: 38 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   22  TPASS  :  rt_sigaction03 failure with sig: 38 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   23  TPASS  :  rt_sigaction03 failure with sig: 38 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   24  TPASS  :  rt_sigaction03 failure with sig: 38 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   25  TPASS  :  rt_sigaction03 failure with sig: 38 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 39
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   26  TPASS  :  rt_sigaction03 failure with sig: 39 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   27  TPASS  :  rt_sigaction03 failure with sig: 39 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   28  TPASS  :  rt_sigaction03 failure with sig: 39 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   29  TPASS  :  rt_sigaction03 failure with sig: 39 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   30  TPASS  :  rt_sigaction03 failure with sig: 39 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 40
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   31  TPASS  :  rt_sigaction03 failure with sig: 40 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   32  TPASS  :  rt_sigaction03 failure with sig: 40 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   33  TPASS  :  rt_sigaction03 failure with sig: 40 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   34  TPASS  :  rt_sigaction03 failure with sig: 40 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   35  TPASS  :  rt_sigaction03 failure with sig: 40 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 41
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   36  TPASS  :  rt_sigaction03 failure with sig: 41 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   37  TPASS  :  rt_sigaction03 failure with sig: 41 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   38  TPASS  :  rt_sigaction03 failure with sig: 41 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   39  TPASS  :  rt_sigaction03 failure with sig: 41 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   40  TPASS  :  rt_sigaction03 failure with sig: 41 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 42
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   41  TPASS  :  rt_sigaction03 failure with sig: 42 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   42  TPASS  :  rt_sigaction03 failure with sig: 42 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   43  TPASS  :  rt_sigaction03 failure with sig: 42 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   44  TPASS  :  rt_sigaction03 failure with sig: 42 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   45  TPASS  :  rt_sigaction03 failure with sig: 42 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 43
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   46  TPASS  :  rt_sigaction03 failure with sig: 43 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   47  TPASS  :  rt_sigaction03 failure with sig: 43 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   48  TPASS  :  rt_sigaction03 failure with sig: 43 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   49  TPASS  :  rt_sigaction03 failure with sig: 43 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   50  TPASS  :  rt_sigaction03 failure with sig: 43 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 44
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   51  TPASS  :  rt_sigaction03 failure with sig: 44 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   52  TPASS  :  rt_sigaction03 failure with sig: 44 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   53  TPASS  :  rt_sigaction03 failure with sig: 44 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   54  TPASS  :  rt_sigaction03 failure with sig: 44 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   55  TPASS  :  rt_sigaction03 failure with sig: 44 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 45
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   56  TPASS  :  rt_sigaction03 failure with sig: 45 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   57  TPASS  :  rt_sigaction03 failure with sig: 45 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   58  TPASS  :  rt_sigaction03 failure with sig: 45 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   59  TPASS  :  rt_sigaction03 failure with sig: 45 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   60  TPASS  :  rt_sigaction03 failure with sig: 45 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 46
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   61  TPASS  :  rt_sigaction03 failure with sig: 46 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   62  TPASS  :  rt_sigaction03 failure with sig: 46 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   63  TPASS  :  rt_sigaction03 failure with sig: 46 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   64  TPASS  :  rt_sigaction03 failure with sig: 46 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   65  TPASS  :  rt_sigaction03 failure with sig: 46 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 47
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   66  TPASS  :  rt_sigaction03 failure with sig: 47 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   67  TPASS  :  rt_sigaction03 failure with sig: 47 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   68  TPASS  :  rt_sigaction03 failure with sig: 47 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   69  TPASS  :  rt_sigaction03 failure with sig: 47 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   70  TPASS  :  rt_sigaction03 failure with sig: 47 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 48
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   71  TPASS  :  rt_sigaction03 failure with sig: 48 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   72  TPASS  :  rt_sigaction03 failure with sig: 48 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   73  TPASS  :  rt_sigaction03 failure with sig: 48 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   74  TPASS  :  rt_sigaction03 failure with sig: 48 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   75  TPASS  :  rt_sigaction03 failure with sig: 48 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 49
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   76  TPASS  :  rt_sigaction03 failure with sig: 49 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   77  TPASS  :  rt_sigaction03 failure with sig: 49 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   78  TPASS  :  rt_sigaction03 failure with sig: 49 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   79  TPASS  :  rt_sigaction03 failure with sig: 49 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   80  TPASS  :  rt_sigaction03 failure with sig: 49 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 50
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   81  TPASS  :  rt_sigaction03 failure with sig: 50 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   82  TPASS  :  rt_sigaction03 failure with sig: 50 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   83  TPASS  :  rt_sigaction03 failure with sig: 50 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   84  TPASS  :  rt_sigaction03 failure with sig: 50 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   85  TPASS  :  rt_sigaction03 failure with sig: 50 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 51
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   86  TPASS  :  rt_sigaction03 failure with sig: 51 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   87  TPASS  :  rt_sigaction03 failure with sig: 51 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   88  TPASS  :  rt_sigaction03 failure with sig: 51 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   89  TPASS  :  rt_sigaction03 failure with sig: 51 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   90  TPASS  :  rt_sigaction03 failure with sig: 51 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 52
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   91  TPASS  :  rt_sigaction03 failure with sig: 52 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   92  TPASS  :  rt_sigaction03 failure with sig: 52 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   93  TPASS  :  rt_sigaction03 failure with sig: 52 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   94  TPASS  :  rt_sigaction03 failure with sig: 52 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03   95  TPASS  :  rt_sigaction03 failure with sig: 52 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 53
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   96  TPASS  :  rt_sigaction03 failure with sig: 53 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03   97  TPASS  :  rt_sigaction03 failure with sig: 53 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   98  TPASS  :  rt_sigaction03 failure with sig: 53 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03   99  TPASS  :  rt_sigaction03 failure with sig: 53 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  100  TPASS  :  rt_sigaction03 failure with sig: 53 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 54
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  101  TPASS  :  rt_sigaction03 failure with sig: 54 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  102  TPASS  :  rt_sigaction03 failure with sig: 54 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  103  TPASS  :  rt_sigaction03 failure with sig: 54 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  104  TPASS  :  rt_sigaction03 failure with sig: 54 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  105  TPASS  :  rt_sigaction03 failure with sig: 54 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 55
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  106  TPASS  :  rt_sigaction03 failure with sig: 55 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  107  TPASS  :  rt_sigaction03 failure with sig: 55 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  108  TPASS  :  rt_sigaction03 failure with sig: 55 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  109  TPASS  :  rt_sigaction03 failure with sig: 55 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  110  TPASS  :  rt_sigaction03 failure with sig: 55 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 56
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  111  TPASS  :  rt_sigaction03 failure with sig: 56 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  112  TPASS  :  rt_sigaction03 failure with sig: 56 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  113  TPASS  :  rt_sigaction03 failure with sig: 56 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  114  TPASS  :  rt_sigaction03 failure with sig: 56 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  115  TPASS  :  rt_sigaction03 failure with sig: 56 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 57
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  116  TPASS  :  rt_sigaction03 failure with sig: 57 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  117  TPASS  :  rt_sigaction03 failure with sig: 57 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  118  TPASS  :  rt_sigaction03 failure with sig: 57 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  119  TPASS  :  rt_sigaction03 failure with sig: 57 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  120  TPASS  :  rt_sigaction03 failure with sig: 57 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 58
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  121  TPASS  :  rt_sigaction03 failure with sig: 58 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  122  TPASS  :  rt_sigaction03 failure with sig: 58 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  123  TPASS  :  rt_sigaction03 failure with sig: 58 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  124  TPASS  :  rt_sigaction03 failure with sig: 58 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  125  TPASS  :  rt_sigaction03 failure with sig: 58 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 59
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  126  TPASS  :  rt_sigaction03 failure with sig: 59 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  127  TPASS  :  rt_sigaction03 failure with sig: 59 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  128  TPASS  :  rt_sigaction03 failure with sig: 59 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  129  TPASS  :  rt_sigaction03 failure with sig: 59 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  130  TPASS  :  rt_sigaction03 failure with sig: 59 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 60
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  131  TPASS  :  rt_sigaction03 failure with sig: 60 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  132  TPASS  :  rt_sigaction03 failure with sig: 60 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  133  TPASS  :  rt_sigaction03 failure with sig: 60 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  134  TPASS  :  rt_sigaction03 failure with sig: 60 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  135  TPASS  :  rt_sigaction03 failure with sig: 60 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 61
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  136  TPASS  :  rt_sigaction03 failure with sig: 61 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  137  TPASS  :  rt_sigaction03 failure with sig: 61 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  138  TPASS  :  rt_sigaction03 failure with sig: 61 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  139  TPASS  :  rt_sigaction03 failure with sig: 61 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  140  TPASS  :  rt_sigaction03 failure with sig: 61 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 62
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  141  TPASS  :  rt_sigaction03 failure with sig: 62 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  142  TPASS  :  rt_sigaction03 failure with sig: 62 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  143  TPASS  :  rt_sigaction03 failure with sig: 62 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  144  TPASS  :  rt_sigaction03 failure with sig: 62 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  145  TPASS  :  rt_sigaction03 failure with sig: 62 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 63
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  146  TPASS  :  rt_sigaction03 failure with sig: 63 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  147  TPASS  :  rt_sigaction03 failure with sig: 63 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  148  TPASS  :  rt_sigaction03 failure with sig: 63 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  149  TPASS  :  rt_sigaction03 failure with sig: 63 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  150  TPASS  :  rt_sigaction03 failure with sig: 63 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  Signal 64
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  151  TPASS  :  rt_sigaction03 failure with sig: 64 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction03  152  TPASS  :  rt_sigaction03 failure with sig: 64 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  153  TPASS  :  rt_sigaction03 failure with sig: 64 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction03  154  TPASS  :  rt_sigaction03 failure with sig: 64 as expected errno  = EINVAL : Invalid argument
+rt_sigaction03    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction03  155  TPASS  :  rt_sigaction03 failure with sig: 64 as expected errno  = EINVAL : Invalid argument

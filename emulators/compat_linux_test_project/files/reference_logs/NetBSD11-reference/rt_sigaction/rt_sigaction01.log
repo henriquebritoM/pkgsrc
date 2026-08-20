@@ -1,0 +1,622 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:14:13 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+rt_sigaction01    0  TINFO  :  Using /tmp/LTP_rt_3YRWBg as tmpdir (tmpfs filesystem)
+rt_sigaction01    0  TINFO  :  signal: 34 
+rt_sigaction01    1  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 34
+rt_sigaction01    0  TINFO  :  signal: 34 
+rt_sigaction01    2  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 34
+rt_sigaction01    0  TINFO  :  signal: 34 
+rt_sigaction01    3  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 34
+rt_sigaction01    0  TINFO  :  signal: 34 
+rt_sigaction01    4  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 34
+rt_sigaction01    0  TINFO  :  signal: 34 
+rt_sigaction01    5  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 34
+rt_sigaction01    0  TINFO  :  signal: 35 
+rt_sigaction01    6  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 35
+rt_sigaction01    0  TINFO  :  signal: 35 
+rt_sigaction01    7  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 35
+rt_sigaction01    0  TINFO  :  signal: 35 
+rt_sigaction01    8  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 35
+rt_sigaction01    0  TINFO  :  signal: 35 
+rt_sigaction01    9  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 35
+rt_sigaction01    0  TINFO  :  signal: 35 
+rt_sigaction01   10  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 35
+rt_sigaction01    0  TINFO  :  signal: 36 
+rt_sigaction01   11  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 36
+rt_sigaction01    0  TINFO  :  signal: 36 
+rt_sigaction01   12  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 36
+rt_sigaction01    0  TINFO  :  signal: 36 
+rt_sigaction01   13  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 36
+rt_sigaction01    0  TINFO  :  signal: 36 
+rt_sigaction01   14  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 36
+rt_sigaction01    0  TINFO  :  signal: 36 
+rt_sigaction01   15  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 36
+rt_sigaction01    0  TINFO  :  signal: 37 
+rt_sigaction01   16  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 37
+rt_sigaction01    0  TINFO  :  signal: 37 
+rt_sigaction01   17  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 37
+rt_sigaction01    0  TINFO  :  signal: 37 
+rt_sigaction01   18  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 37
+rt_sigaction01    0  TINFO  :  signal: 37 
+rt_sigaction01   19  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 37
+rt_sigaction01    0  TINFO  :  signal: 37 
+rt_sigaction01   20  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 37
+rt_sigaction01    0  TINFO  :  signal: 38 
+rt_sigaction01   21  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 38
+rt_sigaction01    0  TINFO  :  signal: 38 
+rt_sigaction01   22  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 38
+rt_sigaction01    0  TINFO  :  signal: 38 
+rt_sigaction01   23  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 38
+rt_sigaction01    0  TINFO  :  signal: 38 
+rt_sigaction01   24  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 38
+rt_sigaction01    0  TINFO  :  signal: 38 
+rt_sigaction01   25  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 38
+rt_sigaction01    0  TINFO  :  signal: 39 
+rt_sigaction01   26  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 39
+rt_sigaction01    0  TINFO  :  signal: 39 
+rt_sigaction01   27  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 39
+rt_sigaction01    0  TINFO  :  signal: 39 
+rt_sigaction01   28  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 39
+rt_sigaction01    0  TINFO  :  signal: 39 
+rt_sigaction01   29  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 39
+rt_sigaction01    0  TINFO  :  signal: 39 
+rt_sigaction01   30  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 39
+rt_sigaction01    0  TINFO  :  signal: 40 
+rt_sigaction01   31  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 40
+rt_sigaction01    0  TINFO  :  signal: 40 
+rt_sigaction01   32  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 40
+rt_sigaction01    0  TINFO  :  signal: 40 
+rt_sigaction01   33  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 40
+rt_sigaction01    0  TINFO  :  signal: 40 
+rt_sigaction01   34  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 40
+rt_sigaction01    0  TINFO  :  signal: 40 
+rt_sigaction01   35  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 40
+rt_sigaction01    0  TINFO  :  signal: 41 
+rt_sigaction01   36  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 41
+rt_sigaction01    0  TINFO  :  signal: 41 
+rt_sigaction01   37  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 41
+rt_sigaction01    0  TINFO  :  signal: 41 
+rt_sigaction01   38  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 41
+rt_sigaction01    0  TINFO  :  signal: 41 
+rt_sigaction01   39  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 41
+rt_sigaction01    0  TINFO  :  signal: 41 
+rt_sigaction01   40  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 41
+rt_sigaction01    0  TINFO  :  signal: 42 
+rt_sigaction01   41  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 42
+rt_sigaction01    0  TINFO  :  signal: 42 
+rt_sigaction01   42  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 42
+rt_sigaction01    0  TINFO  :  signal: 42 
+rt_sigaction01   43  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 42
+rt_sigaction01    0  TINFO  :  signal: 42 
+rt_sigaction01   44  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 42
+rt_sigaction01    0  TINFO  :  signal: 42 
+rt_sigaction01   45  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 42
+rt_sigaction01    0  TINFO  :  signal: 43 
+rt_sigaction01   46  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 43
+rt_sigaction01    0  TINFO  :  signal: 43 
+rt_sigaction01   47  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 43
+rt_sigaction01    0  TINFO  :  signal: 43 
+rt_sigaction01   48  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 43
+rt_sigaction01    0  TINFO  :  signal: 43 
+rt_sigaction01   49  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 43
+rt_sigaction01    0  TINFO  :  signal: 43 
+rt_sigaction01   50  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 43
+rt_sigaction01    0  TINFO  :  signal: 44 
+rt_sigaction01   51  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 44
+rt_sigaction01    0  TINFO  :  signal: 44 
+rt_sigaction01   52  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 44
+rt_sigaction01    0  TINFO  :  signal: 44 
+rt_sigaction01   53  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 44
+rt_sigaction01    0  TINFO  :  signal: 44 
+rt_sigaction01   54  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 44
+rt_sigaction01    0  TINFO  :  signal: 44 
+rt_sigaction01   55  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 44
+rt_sigaction01    0  TINFO  :  signal: 45 
+rt_sigaction01   56  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 45
+rt_sigaction01    0  TINFO  :  signal: 45 
+rt_sigaction01   57  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 45
+rt_sigaction01    0  TINFO  :  signal: 45 
+rt_sigaction01   58  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 45
+rt_sigaction01    0  TINFO  :  signal: 45 
+rt_sigaction01   59  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 45
+rt_sigaction01    0  TINFO  :  signal: 45 
+rt_sigaction01   60  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 45
+rt_sigaction01    0  TINFO  :  signal: 46 
+rt_sigaction01   61  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 46
+rt_sigaction01    0  TINFO  :  signal: 46 
+rt_sigaction01   62  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 46
+rt_sigaction01    0  TINFO  :  signal: 46 
+rt_sigaction01   63  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 46
+rt_sigaction01    0  TINFO  :  signal: 46 
+rt_sigaction01   64  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 46
+rt_sigaction01    0  TINFO  :  signal: 46 
+rt_sigaction01   65  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 46
+rt_sigaction01    0  TINFO  :  signal: 47 
+rt_sigaction01   66  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 47
+rt_sigaction01    0  TINFO  :  signal: 47 
+rt_sigaction01   67  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 47
+rt_sigaction01    0  TINFO  :  signal: 47 
+rt_sigaction01   68  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 47
+rt_sigaction01    0  TINFO  :  signal: 47 
+rt_sigaction01   69  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 47
+rt_sigaction01    0  TINFO  :  signal: 47 
+rt_sigaction01   70  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 47
+rt_sigaction01    0  TINFO  :  signal: 48 
+rt_sigaction01   71  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 48
+rt_sigaction01    0  TINFO  :  signal: 48 
+rt_sigaction01   72  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 48
+rt_sigaction01    0  TINFO  :  signal: 48 
+rt_sigaction01   73  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 48
+rt_sigaction01    0  TINFO  :  signal: 48 
+rt_sigaction01   74  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 48
+rt_sigaction01    0  TINFO  :  signal: 48 
+rt_sigaction01   75  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 48
+rt_sigaction01    0  TINFO  :  signal: 49 
+rt_sigaction01   76  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 49
+rt_sigaction01    0  TINFO  :  signal: 49 
+rt_sigaction01   77  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 49
+rt_sigaction01    0  TINFO  :  signal: 49 
+rt_sigaction01   78  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 49
+rt_sigaction01    0  TINFO  :  signal: 49 
+rt_sigaction01   79  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 49
+rt_sigaction01    0  TINFO  :  signal: 49 
+rt_sigaction01   80  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 49
+rt_sigaction01    0  TINFO  :  signal: 50 
+rt_sigaction01   81  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 50
+rt_sigaction01    0  TINFO  :  signal: 50 
+rt_sigaction01   82  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 50
+rt_sigaction01    0  TINFO  :  signal: 50 
+rt_sigaction01   83  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 50
+rt_sigaction01    0  TINFO  :  signal: 50 
+rt_sigaction01   84  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 50
+rt_sigaction01    0  TINFO  :  signal: 50 
+rt_sigaction01   85  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 50
+rt_sigaction01    0  TINFO  :  signal: 51 
+rt_sigaction01   86  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 51
+rt_sigaction01    0  TINFO  :  signal: 51 
+rt_sigaction01   87  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 51
+rt_sigaction01    0  TINFO  :  signal: 51 
+rt_sigaction01   88  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 51
+rt_sigaction01    0  TINFO  :  signal: 51 
+rt_sigaction01   89  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 51
+rt_sigaction01    0  TINFO  :  signal: 51 
+rt_sigaction01   90  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 51
+rt_sigaction01    0  TINFO  :  signal: 52 
+rt_sigaction01   91  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 52
+rt_sigaction01    0  TINFO  :  signal: 52 
+rt_sigaction01   92  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 52
+rt_sigaction01    0  TINFO  :  signal: 52 
+rt_sigaction01   93  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 52
+rt_sigaction01    0  TINFO  :  signal: 52 
+rt_sigaction01   94  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 52
+rt_sigaction01    0  TINFO  :  signal: 52 
+rt_sigaction01   95  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 52
+rt_sigaction01    0  TINFO  :  signal: 53 
+rt_sigaction01   96  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 53
+rt_sigaction01    0  TINFO  :  signal: 53 
+rt_sigaction01   97  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 53
+rt_sigaction01    0  TINFO  :  signal: 53 
+rt_sigaction01   98  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 53
+rt_sigaction01    0  TINFO  :  signal: 53 
+rt_sigaction01   99  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 53
+rt_sigaction01    0  TINFO  :  signal: 53 
+rt_sigaction01  100  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 53
+rt_sigaction01    0  TINFO  :  signal: 54 
+rt_sigaction01  101  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 54
+rt_sigaction01    0  TINFO  :  signal: 54 
+rt_sigaction01  102  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 54
+rt_sigaction01    0  TINFO  :  signal: 54 
+rt_sigaction01  103  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 54
+rt_sigaction01    0  TINFO  :  signal: 54 
+rt_sigaction01  104  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 54
+rt_sigaction01    0  TINFO  :  signal: 54 
+rt_sigaction01  105  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 54
+rt_sigaction01    0  TINFO  :  signal: 55 
+rt_sigaction01  106  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 55
+rt_sigaction01    0  TINFO  :  signal: 55 
+rt_sigaction01  107  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 55
+rt_sigaction01    0  TINFO  :  signal: 55 
+rt_sigaction01  108  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 55
+rt_sigaction01    0  TINFO  :  signal: 55 
+rt_sigaction01  109  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 55
+rt_sigaction01    0  TINFO  :  signal: 55 
+rt_sigaction01  110  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 55
+rt_sigaction01    0  TINFO  :  signal: 56 
+rt_sigaction01  111  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 56
+rt_sigaction01    0  TINFO  :  signal: 56 
+rt_sigaction01  112  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 56
+rt_sigaction01    0  TINFO  :  signal: 56 
+rt_sigaction01  113  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 56
+rt_sigaction01    0  TINFO  :  signal: 56 
+rt_sigaction01  114  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 56
+rt_sigaction01    0  TINFO  :  signal: 56 
+rt_sigaction01  115  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 56
+rt_sigaction01    0  TINFO  :  signal: 57 
+rt_sigaction01  116  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 57
+rt_sigaction01    0  TINFO  :  signal: 57 
+rt_sigaction01  117  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 57
+rt_sigaction01    0  TINFO  :  signal: 57 
+rt_sigaction01  118  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 57
+rt_sigaction01    0  TINFO  :  signal: 57 
+rt_sigaction01  119  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 57
+rt_sigaction01    0  TINFO  :  signal: 57 
+rt_sigaction01  120  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 57
+rt_sigaction01    0  TINFO  :  signal: 58 
+rt_sigaction01  121  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 58
+rt_sigaction01    0  TINFO  :  signal: 58 
+rt_sigaction01  122  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 58
+rt_sigaction01    0  TINFO  :  signal: 58 
+rt_sigaction01  123  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 58
+rt_sigaction01    0  TINFO  :  signal: 58 
+rt_sigaction01  124  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 58
+rt_sigaction01    0  TINFO  :  signal: 58 
+rt_sigaction01  125  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 58
+rt_sigaction01    0  TINFO  :  signal: 59 
+rt_sigaction01  126  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 59
+rt_sigaction01    0  TINFO  :  signal: 59 
+rt_sigaction01  127  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 59
+rt_sigaction01    0  TINFO  :  signal: 59 
+rt_sigaction01  128  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 59
+rt_sigaction01    0  TINFO  :  signal: 59 
+rt_sigaction01  129  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 59
+rt_sigaction01    0  TINFO  :  signal: 59 
+rt_sigaction01  130  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 59
+rt_sigaction01    0  TINFO  :  signal: 60 
+rt_sigaction01  131  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 60
+rt_sigaction01    0  TINFO  :  signal: 60 
+rt_sigaction01  132  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 60
+rt_sigaction01    0  TINFO  :  signal: 60 
+rt_sigaction01  133  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 60
+rt_sigaction01    0  TINFO  :  signal: 60 
+rt_sigaction01  134  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 60
+rt_sigaction01    0  TINFO  :  signal: 60 
+rt_sigaction01  135  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 60
+rt_sigaction01    0  TINFO  :  signal: 61 
+rt_sigaction01  136  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 61
+rt_sigaction01    0  TINFO  :  signal: 61 
+rt_sigaction01  137  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 61
+rt_sigaction01    0  TINFO  :  signal: 61 
+rt_sigaction01  138  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 61
+rt_sigaction01    0  TINFO  :  signal: 61 
+rt_sigaction01  139  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 61
+rt_sigaction01    0  TINFO  :  signal: 61 
+rt_sigaction01  140  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 61
+rt_sigaction01    0  TINFO  :  signal: 62 
+rt_sigaction01  141  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 62
+rt_sigaction01    0  TINFO  :  signal: 62 
+rt_sigaction01  142  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 62
+rt_sigaction01    0  TINFO  :  signal: 62 
+rt_sigaction01  143  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 62
+rt_sigaction01    0  TINFO  :  signal: 62 
+rt_sigaction01  144  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 62
+rt_sigaction01    0  TINFO  :  signal: 62 
+rt_sigaction01  145  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  Signal Handler Called with signal number 62
+rt_sigaction01    0  TINFO  :  signal: 63 
+rt_sigaction01  146  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 63 
+rt_sigaction01  147  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  signal: 63 
+rt_sigaction01  148  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 63 
+rt_sigaction01  149  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 63 
+rt_sigaction01  150  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 
+rt_sigaction01    0  TINFO  :  signal: 64 
+rt_sigaction01  151  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 64 
+rt_sigaction01  152  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND 
+rt_sigaction01    0  TINFO  :  signal: 64 
+rt_sigaction01  153  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 64 
+rt_sigaction01  154  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
+rt_sigaction01    0  TINFO  :  signal: 64 
+rt_sigaction01  155  TPASS  :  rt_sigaction call succeeded: result = 0 
+rt_sigaction01    0  TINFO  :  sa.sa_flags = SA_NOMASK 

@@ -40,7 +40,7 @@ USER_DEFINED_LOGS_DIR=""
 # Directory where the reference logs are stored
 # to be compared against
 REFERENCE_LOGS_DIR=""
-USER_DEFINED_REFERENCE_DIR=""
+USER_DEFINED_REFERENCE_DIR="${DATA_DIR}/reference_logs/reference"
 
 # Directory where results from comparisons are stored
 COMPARE_DIR="${CALLING_DIR}/diff_logs"
@@ -184,13 +184,15 @@ OPTIONS
 		created using the 'reproducible' mode ('-r' flag).
 
 		If no directory is provided through 'logs_dir', the reference
-		shipped	with the package for the given NetBSD version is used
-		to compare against. If a directory is passed, it is used
-		instead of the reference.
+		shipped	with the package is used to compare against. If a
+		directory is passed, it is used	instead of the reference.
 
 		In both cases, the second set of logs to compare against the
 		reference is taken from '-d' flag, if passed, or from the
 		default 'sys_logs' otherwise.
+
+		If '-s' is also passed, the comparison is restricted to the
+		syscalls listed there.
 
 		The comparison is done as follows:
 		Checks for tests that are new, tests that are no longer
@@ -591,7 +593,12 @@ compare_tests() {
 	create_compare_dir 
 	compare_create_header "${reference_logs_dir}" "${current_logs_dir}"
 
-	all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
+	# Allow the user to pass which syscall should be compared
+	if [ -n "${SYSCALLS_LIST}" ]; then
+		all_syscalls="$(echo "${SYSCALLS_LIST}" | tr ',' '\n' | sort -u)"
+	else
+		all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
+	fi
 
 	for syscall in ${all_syscalls}; do
 

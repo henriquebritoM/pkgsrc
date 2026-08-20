@@ -1,0 +1,27 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 02:03:00 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+tst_kconfig.c:42: TWARN: 
+timer_settime01.c:183: TPASS: 
+timer_settime01.c:183: TPASS: 
+tst_test.c:1948: TBROK: 
+
+HINT: You _MAY_ be missing kernel fixes:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f18ddc13af98
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e86fea764991
+
+Summary:
+passed   2
+failed   0
+broken   1
+skipped  0
+warnings 1

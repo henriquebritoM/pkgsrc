@@ -1,0 +1,21 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:19:02 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+signal06    0  TINFO  :  loop = 30000
+signal06    1  TPASS  :  signal06 call succeeded
+signal06    0  TINFO  :  loop = 30000
+signal06    2  TPASS  :  signal06 call succeeded
+signal06    0  TINFO  :  loop = 30000
+signal06    3  TPASS  :  signal06 call succeeded
+signal06    0  TINFO  :  loop = 30000
+signal06    4  TPASS  :  signal06 call succeeded
+signal06    0  TINFO  :  loop = 30000
+signal06    5  TPASS  :  signal06 call succeeded

@@ -1,0 +1,16 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:13:55 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+recv01      1  TPASS  :  bad file descriptor successful
+recv01      2  TPASS  :  invalid socket successful
+recv01      3  TPASS  :  invalid recv buffer successful
+recv01      4  TPASS  :  invalid MSG_OOB flag set successful
+recv01      5  TFAIL  :  recv01.c:124: invalid MSG_ERRQUEUE flag set ; returned 0 (expected -1), errno 0 (expected 11)

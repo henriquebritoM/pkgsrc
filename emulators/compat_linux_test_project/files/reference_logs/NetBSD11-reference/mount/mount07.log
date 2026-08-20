@@ -1,0 +1,41 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:10:24 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+tst_device.c:215: TWARN: 
+tst_device.c:215: TWARN: 
+tst_kconfig.c:42: TWARN: 
+mke2fs 1.47.4 (6-Mar-2025)
+warning: Unable to get device geometry for /dev/rvnd0d
+mount07.c:139: TFAIL: 
+mount07.c:53: TPASS: 
+mount07.c:65: TPASS: 
+mount07.c:71: TPASS: 
+mount07.c:88: TPASS: 
+mount07.c:94: TPASS: 
+mount07.c:96: TPASS: 
+mount07.c:108: TPASS: 
+mount07.c:146: TFAIL: 
+mount07.c:50: TFAIL: 
+mount07.c:65: TPASS: 
+mount07.c:71: TPASS: 
+mount07.c:88: TPASS: 
+mount07.c:94: TPASS: 
+mount07.c:96: TPASS: 
+mount07.c:108: TFAIL: 
+tst_device.c:488: TWARN: 
+mount07.c:150: TBROK: 
+
+Summary:
+passed   12
+failed   4
+broken   1
+skipped  0
+warnings 4

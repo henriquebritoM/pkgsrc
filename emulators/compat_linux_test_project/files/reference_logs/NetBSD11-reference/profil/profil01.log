@@ -1,0 +1,33 @@
+---- compat_linux_test_project log header ----
+date: Wed, 26 Aug 2026 00:13:00 +0000
+netbsd_version: 11.0
+netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+arch: amd64
+ltp_version: 20260529
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+syscall_tested: 
+reproducible: 1
+--------------------------------------------------
+
+profil01    0  TINFO  :  buf[0x3fa4]=1
+profil01    0  TINFO  :  buf[0x4042]=1
+profil01    0  TINFO  :  buf[0x4044]=70
+profil01    0  TINFO  :  buf[0x404a]=25
+profil01    0  TINFO  :  buf[0x404c]=51
+profil01    0  TINFO  :  buf[0x4060]=1
+profil01    0  TINFO  :  buf[0x4074]=1
+profil01    0  TINFO  :  buf[0x4090]=1
+profil01    0  TINFO  :  buf[0x4138]=5
+profil01    0  TINFO  :  buf[0x413c]=1
+profil01    0  TINFO  :  buf[0x413e]=38
+profil01    0  TINFO  :  buf[0x4158]=12
+profil01    0  TINFO  :  buf[0x415c]=89
+profil01    0  TINFO  :  buf[0x4168]=1
+profil01    0  TINFO  :  buf[0x416e]=4
+profil01    0  TINFO  :  buf[0x4172]=38
+profil01    0  TINFO  :  buf[0x4180]=11
+profil01    0  TINFO  :  buf[0x4184]=43
+profil01    0  TINFO  :  buf[0x4186]=47
+profil01    0  TINFO  :  buf[0x4188]=60
+profil01    0  TINFO  :  buf[0x418c]=1
+profil01    1  TPASS  :  profil recorded some data
