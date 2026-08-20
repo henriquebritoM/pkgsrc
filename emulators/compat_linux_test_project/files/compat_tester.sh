@@ -334,6 +334,11 @@ run_testcase() {
 check_for_testcase_issue() {
 	syscall_name="$1"
 
+	# The user decided to run this syscall, do not block
+	if [ "${syscall_name}" = "${SYSCALL_NAME}" ]; then
+		return 0
+	fi
+
 	case "${syscall_name}" in
 		# causes kernel panic
 		rt_sigqueueinfo)
