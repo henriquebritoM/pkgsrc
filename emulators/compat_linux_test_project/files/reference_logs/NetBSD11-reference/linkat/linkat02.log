@@ -1,20 +1,20 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 00:10:07 +0000
+date: Thu, 27 Aug 2026 00:09:39 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: linkat
 reproducible: 1
 --------------------------------------------------
 
 mke2fs 1.47.4 (6-Mar-2025)
 warning: Unable to get device geometry for /dev/rvnd0d
-linkat02    0  TINFO  :  Using /tmp/LTP_linh6e5ep as tmpdir (tmpfs filesystem)
+linkat02    0  TINFO  :  Using /tmp/LTP_lin1qotsL as tmpdir (tmpfs filesystem)
 linkat02    0  TINFO  :  Using test device LTP_DEV='/dev/rvnd0d'
 linkat02    0  TWARN  :  tst_device.c:215: /dev/rvnd0d is not a block device
 linkat02    0  TINFO  :  Formatting /dev/rvnd0d with ext2 opts='' extra opts=''
-linkat02    0  TINFO  :  Mounting /dev/rvnd0d to /tmp/LTP_linh6e5ep/mntpoint fstyp=ext2 flags=0
+linkat02    0  TINFO  :  Mounting /dev/rvnd0d to /tmp/LTP_lin1qotsL/mntpoint fstyp=ext2 flags=0
 linkat02    1  TBROK  :  linkat02.c:172: mount(/dev/rvnd0d, mntpoint, ext2, 0, (nil)) failed: errno=ENOSYS(38): Function not implemented
 linkat02    2  TBROK  :  linkat02.c:172: Remaining cases broken

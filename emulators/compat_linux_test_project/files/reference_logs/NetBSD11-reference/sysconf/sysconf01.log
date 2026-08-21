@@ -1,11 +1,11 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 02:02:59 +0000
+date: Thu, 27 Aug 2026 00:20:23 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: sysconf
 reproducible: 1
 --------------------------------------------------
 
@@ -47,7 +47,7 @@ sysconf01   35  TPASS  :  _SC_RE_DUP_MAX = 32767
 sysconf01   36  TPASS  :  _SC_XOPEN_UNIX = 1
 sysconf01   37  TPASS  :  _SC_PAGESIZE = 4096
 sysconf01   38  TPASS  :  _SC_PHYS_PAGES = 2097022
-sysconf01   39  TPASS  :  _SC_AVPHYS_PAGES = 1834938
+sysconf01   39  TPASS  :  _SC_AVPHYS_PAGES = 1903774
 sysconf01   40  TCONF  :  sysconf01.c:65: Not supported sysconf resource: _SC_AIO_MAX
 sysconf01   41  TPASS  :  _SC_AIO_PRIO_DELTA_MAX = 20
 sysconf01   42  TPASS  :  _SC_SEMAPHORES = 200809

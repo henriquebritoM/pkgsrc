@@ -1,15 +1,15 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 00:14:13 +0000
+date: Thu, 27 Aug 2026 00:13:36 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: rt_sigaction
 reproducible: 1
 --------------------------------------------------
 
-rt_sigaction02    0  TINFO  :  Using /tmp/LTP_rt_aBhb2m as tmpdir (tmpfs filesystem)
+rt_sigaction02    0  TINFO  :  Using /tmp/LTP_rt_lDERq2 as tmpdir (tmpfs filesystem)
 rt_sigaction02    0  TINFO  :  Signal 34
 rt_sigaction02    0  TINFO  :  sa.sa_flags = SA_RESETHAND|SA_SIGINFO 
 rt_sigaction02    1  TPASS  :  rt_sigaction02 failure with sig: 34 as expected errno  = EFAULT : Bad address

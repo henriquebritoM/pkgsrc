@@ -1,16 +1,16 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 00:04:21 +0000
+date: Thu, 27 Aug 2026 00:04:06 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: fcntl
 reproducible: 1
 --------------------------------------------------
 
-fcntl09     0  TINFO  :  Using /tmp/LTP_fcnCWbCQa as tmpdir (tmpfs filesystem)
-fcntl09     1  TPASS  :  fcntl(./file_16650, F_SETLK, &flocks) flocks.l_type = F_WRLCK returned 0
-fcntl09     2  TPASS  :  fcntl(./file_16650, F_SETLK, &flocks) flocks.l_type = F_UNLCK returned 0
-fcntl09     1  TPASS  :  fcntl(./file_16650, F_SETLK, &flocks) flocks.l_type = F_RDLCK returned 0
-fcntl09     2  TPASS  :  fcntl(./file_16650, F_SETLK, &flocks) flocks.l_type = F_UNLCK returned 0
+fcntl09     0  TINFO  :  Using /tmp/LTP_fcnGA6ro3 as tmpdir (tmpfs filesystem)
+fcntl09     1  TPASS  :  fcntl(./file_3066, F_SETLK, &flocks) flocks.l_type = F_WRLCK returned 0
+fcntl09     2  TPASS  :  fcntl(./file_3066, F_SETLK, &flocks) flocks.l_type = F_UNLCK returned 0
+fcntl09     1  TPASS  :  fcntl(./file_3066, F_SETLK, &flocks) flocks.l_type = F_RDLCK returned 0
+fcntl09     2  TPASS  :  fcntl(./file_3066, F_SETLK, &flocks) flocks.l_type = F_UNLCK returned 0

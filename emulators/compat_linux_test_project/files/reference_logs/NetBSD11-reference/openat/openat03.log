@@ -1,14 +1,14 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 00:12:09 +0000
+date: Thu, 27 Aug 2026 00:11:33 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: openat
 reproducible: 1
 --------------------------------------------------
 
-openat03    0  TINFO  :  Using /tmp/LTP_opezf7jnu as tmpdir (tmpfs filesystem)
+openat03    0  TINFO  :  Using /tmp/LTP_opeIgiKGA as tmpdir (tmpfs filesystem)
 openat03    1  TCONF  :  openat03.c:56: O_TMPFILE not supported
 openat03    2  TCONF  :  openat03.c:56: Remaining cases not appropriate for configuration

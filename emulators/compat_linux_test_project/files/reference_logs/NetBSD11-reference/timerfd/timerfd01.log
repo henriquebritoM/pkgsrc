@@ -1,11 +1,11 @@
 ---- compat_linux_test_project log header ----
-date: Wed, 26 Aug 2026 02:03:00 +0000
+date: Thu, 27 Aug 2026 00:20:24 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
 script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
-syscall_tested: 
+syscall_tested: timerfd
 reproducible: 1
 --------------------------------------------------
 
@@ -13,19 +13,19 @@ tst_kconfig.c:42: TWARN:
 timerfd01.c:89: TPASS: 
 timerfd01.c:89: TPASS: 
 timerfd01.c:126: TFAIL: 
-timerfd01.c:86: TFAIL: 
+timerfd01.c:89: TPASS: 
 timerfd01.c:89: TPASS: 
 timerfd01.c:146: TPASS: 
 timerfd01.c:89: TPASS: 
 timerfd01.c:89: TPASS: 
 timerfd01.c:126: TFAIL: 
-timerfd01.c:86: TFAIL: 
+timerfd01.c:89: TPASS: 
 timerfd01.c:89: TPASS: 
 timerfd01.c:146: TPASS: 
 
 Summary:
-passed   8
-failed   4
+passed   10
+failed   2
 broken   0
 skipped  0
 warnings 1
