@@ -34,6 +34,15 @@ LINK_MODE=""
 CFLAGS="-Os -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-stack-protector"
 LDFLAGS=""
 
+is_compat_linux_active() {
+    [ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
+}
+
+if ! is_compat_linux_active; then
+	printf 'compat_linux is not active. Try modload compat_linux before running the script' >&2
+	exit 1
+fi
+
 # Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
 # into thinking there is an adequate pkg-config.
 # Compiling the syscalls testcases doesn't require the pkg-config, but 
