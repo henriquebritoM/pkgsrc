@@ -56,7 +56,7 @@ FAIL_ON_REGRESSION=0
 
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
-# to pass through a enviroment variable
+# to pass through a environment variable
 BLK_FILE="${DATA_DIR}/test.img"
 BLK_VND="vnd0"
 BLK_DEV="/dev/r${BLK_VND}d"
@@ -72,14 +72,23 @@ LTP_REPRODUCIBLE_OUTPUT=0
 KCONFIG_PATH="${DATA_DIR}/linux-config"
 
 # Some testcases verify if the operations were finished under
-# a timer treshold. The LTP way of detecting if the system is
-# a VM does not work os NetBSD.
+# a timer threshold. The LTP way of detecting if the system is
+# a VM does not work on NetBSD.
 # With this setting, we tell LTP to not check the tests against
 # timers.
 LTP_VIRT_OVERRIDE="kvm"
 
 # Recreation of the command and args used to run the script
 _SCRIPT_INVOCATION=""
+
+is_compat_linux_active() {
+    [ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
+}
+
+if ! is_compat_linux_active; then
+	printf 'compat_linux is not active. Try modload compat_linux before running the script' >&2
+	exit 1
+fi
 
 update_env_vars() {
 	export LTPROOT="${DATA_DIR}"
@@ -88,10 +97,6 @@ update_env_vars() {
 	export LTP_REPRODUCIBLE_OUTPUT="${LTP_REPRODUCIBLE_OUTPUT}"
 	export KCONFIG_PATH="${KCONFIG_PATH}"
 	export LTP_VIRT_OVERRIDE="${LTP_VIRT_OVERRIDE}"
-}
-
-is_empty_dir() {
-	[ -z "$(ls -A "$1")" ]
 }
 
 quote_args() {
@@ -110,7 +115,7 @@ next_unused_dir_name() {
 	base_dir_name="$1"
 
 	if [ ! -e "${base_dir_name}" ]; then
-		echo "${base_dir_name}"
+		printf '%s\n' "${base_dir_name}"
 		return 0
 	fi
 
@@ -120,7 +125,7 @@ next_unused_dir_name() {
 		i=$((i + 1))
 	done
 
-	echo "${base_dir_name}_${i}"
+	printf '%s\n' "${base_dir_name}_${i}"
 }
 
 print_help_message() {
@@ -153,7 +158,7 @@ DESCRIPTION
 		https://github.com/linux-test-project/ltp
 
 OPTIONS
-	-d, --dir path
+	-d, --output-dir path
 		Behavior depends on the mode the script is run in:
  
 		In test-run mode (default): path is the directory where
@@ -168,9 +173,15 @@ OPTIONS
 		The script will search for them using the LTP runtest file,
 		so the name may be slightly different from the syscall name
 		(though this is unusual).
+
+		WARNING: some syscalls are excluded from the default (full)
+		run because they are known to cause problems (e.g. kernel
+		panics or hangs, see check_for_testcase_issue() in the
+		script). If you explicitly list one of these syscalls here,
+		the script will still run it, but will print a warning first.
 	
 	-r, --reproducible
-		Sets the LTP enviroment variable LTP_REPRODUCIBLE_OUTPUT to 1.
+		Sets the LTP environment variable LTP_REPRODUCIBLE_OUTPUT to 1.
 		According to LTP documentation, this "suppress printing TINFO
 		and TDEBUG messages and discards the actual content of the
 		other messages printed by the test (suitable for a
@@ -212,6 +223,19 @@ OPTIONS
 			    |-- syscall_a/
 			        |- testcase01.log
 
+		Each generated testcase01.log file is self-contained:
+		- For 'new'/'removed' testcases, it has a short status line
+		  followed by the full content of the one log that exists
+		  (current or reference, respectively).
+		- For 'changed'/'fixed'/'regressed' testcases, it has the
+		  reference and current pass/failed/broken/skipped/warnings
+		  counts, followed by the full content of both the reference
+		  and the current log.
+		This means you normally do not need to go dig through the
+		original sys_logs/ or reference logs directories to
+		investigate a specific result; everything relevant is already
+		copied into diff_logs/.
+
 		The comparison assumes the testcases output follows the 
 		standard and new LTP strucuture. This is not true for every
 		testcase, in this case, the comparison has undefined 
@@ -233,27 +257,32 @@ mount_ltp_dev() {
 
 	if [ "$(vnconfig -l ${BLK_VND})" != "${BLK_VND}: not in use" ]; then
 		# Stop early if the vnd target is already in use
-		echo "${BLK_VND} is already in use. Cannot continue" >&2
-		echo "Did you stop mid-test?" >&2
+		printf '%s\n' "${BLK_VND} is already in use. Cannot continue" >&2
+		printf '%s\n' "Did you stop mid-test? Try running 'vnconfig -u ${BLK_VND}' to free it up, then re-run this script." >&2
 		exit 1
 	else
 		# Mount the vnd if the target is free
+		printf '%s\n' "Mounting block device ${BLK_VND} from image ${BLK_FILE}..."
 		vnconfig "${BLK_VND}" "${BLK_FILE}"
 	fi
 }
 
 unmount_ltp_dev() {
-	# checks if the vnd was mounted by the script
+	# unconditionally releases the vnd used by the tests; only called after
+	# a successful mount_ltp_dev, so this should always be safe
+	printf '%s\n' "Unmounting block device ${BLK_VND}..."
 	vnconfig -u "${BLK_VND}"
-}
-
-clean_logs() {
-	rm -rf "${LOGS_DIR:?}"/*
 }
 
 create_logs_dir() {
 	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
 		LOGS_DIR="${USER_DEFINED_LOGS_DIR}"
+
+		# Overwrites any older logs already here
+		if [ -e "${LOGS_DIR}" ]; then
+			printf '%s\n' "Directory '${LOGS_DIR}' already exists, clearing previous logs before starting"
+			rm -rf "${LOGS_DIR:?}"/*
+		fi
 
 	else
 		base_logs_dir="$(next_unused_dir_name  "sys_logs")"
@@ -262,6 +291,7 @@ create_logs_dir() {
 	fi
 
 	mkdir -p "${LOGS_DIR}"
+	printf '%s\n' "Logs will be stored in: ${LOGS_DIR}"
 }
 
 create_compare_dir() {
@@ -272,6 +302,7 @@ create_compare_dir() {
 	fi
 
 	mkdir -p "${COMPARE_DIR}"
+	printf '%s\n' "Comparison output will be stored in: ${COMPARE_DIR}"
 }
 
 # Header stores some useful data about the enviroment in which the tests
@@ -289,7 +320,7 @@ create_compare_dir() {
 # reproducible: 1
 # --------------------------------------------------
 log_header() {
-	sys_filter="$1"
+	syscall_tested="$1"
 
 	curr_date="$(date -uR)"
 	kernel_version="$(uname -r)"
@@ -305,7 +336,7 @@ netbsd_build: ${kernel_build}
 arch: ${arch}
 ltp_version: ${ltp_version}
 script_invocation: "${_SCRIPT_INVOCATION}"
-syscall_tested: ${sys_filter}
+syscall_tested: ${syscall_tested}
 reproducible: ${LTP_REPRODUCIBLE_OUTPUT}
 --------------------------------------------------
 
@@ -316,26 +347,43 @@ EOF
 run_testcase() {
 	test_name="$1"
 	test_bin="$2"
-	test_args="$3"
+	syscall_tested="$3"
+	test_args="$4"
 
 	output_file="${syscall_dir}/${test_name}.log"
 
 	# Prints the header for the logs
 	# Clears the file if it was present
-	log_header "${sys_filter}" > "${output_file}"
+	log_header "${syscall_tested}" > "${output_file}"
 
 	set -- ${test_args} # word splitting is desired
 
-	echo "syscall_test: ${test_bin}"
+	printf '%s\n' "syscall_test: ${test_bin}"
 
-	"${bin_dir}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
+	"${BINARIES_DIR}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
 }
 
 check_for_testcase_issue() {
 	syscall_name="$1"
 
-	# The user decided to run this syscall, do not block
+	# The user explicitly asked to test this exact syscall (via -s/--syscall),
+	# so we let it run even if it is on the "known issues" list below.
+	# We still warn loudly, since a couple of these are known to panic the
+	# kernel rather than just fail or hang.
 	if [ "${syscall_name}" = "${SYSCALL_NAME}" ]; then
+		case "${syscall_name}" in
+			rt_sigqueueinfo|copy_file_range)
+				msg="WARNING: '${syscall_name}' is known to cause a KERNEL PANIC under compat_linux."
+				msg="${msg} Running it anyway because it was explicitly requested with -s/--syscall."
+				msg="${msg} Make sure any important work is saved."
+				printf '%s\n' "${msg}" >&2
+				;;
+			sigprocmask|sigrelse)
+				msg="WARNING: '${syscall_name}' is known to hang and never finish under compat_linux."
+				msg="${msg} Running it anyway because it was explicitly requested with -s/--syscall."
+				printf '%s\n' "${msg}" >&2
+				;;
+		esac
 		return 0
 	fi
 
@@ -368,32 +416,57 @@ run_testcases() {
 	syscall="$1"
 	sys_filter="$(basename "${syscall}")" # name of the syscall passed
 
-	bin_dir="${BINARIES_DIR}"
 	runtest_syscalls_file="${RUNTEST_JOIN_FILE}"
+
+	if [ -n "${sys_filter}" ]; then
+		printf '%s\n' "==> Testing syscall: ${sys_filter}"
+	else
+		printf '%s\n' "==> No syscall filter given, testing every syscall in the index (this can take a long time)"
+	fi
 
 	cat "${INDEX_FILE}" | while read -r syscall_name testcases; do
 
-		# skipps the lines that do not match sys_filter, unless it is empty
+		# skips the lines that do not match sys_filter, unless it is empty
 		if [ -n "${sys_filter}" ] && [ "${syscall_name}" != "${sys_filter}" ]; then
 			continue
 		fi
 
-		# skipps tests that are known to cause issues
+		# skips tests that are known to cause issues
 		if ! check_for_testcase_issue "${syscall_name}"; then
+			msg="Skipping syscall '${syscall_name}': known to cause issues, see check_for_testcase_issue()"
+			msg="${msg} (use -s ${syscall_name} to force it)"
+			printf '%s\n' "${msg}"
 			continue
 		fi
 
+		# When iterating through the whole index, let the user know which
+		# syscall is currently being tested
+		if [ -z "${sys_filter}" ]; then
+			printf '%s\n' "  -> ${syscall_name}"
+		fi
+
 		syscall_dir="${LOGS_DIR}/${syscall_name}"
+
 		# Clears previous logs, if any
 		if [ -e "${syscall_dir:?}" ]; then
-			rm "${syscall_dir:?}/*"
+			rm -rf "${syscall_dir:?}"/* 2>/dev/null || true
 		else 
 			mkdir -p "${syscall_dir}"
 		fi
 
 		for testcase in ${testcases}; do
 
-			runtest_line="$(grep "^${testcase}[[:space:]]" "${runtest_syscalls_file}")"
+			# '|| true' avoids aborting the whole script (set -e) if the
+			# index and the runtest file ever get out of sync for a given
+			# testcase; we warn and skip that single testcase instead.
+			runtest_line="$(grep "^${testcase}[[:space:]]" "${runtest_syscalls_file}" || true)"
+
+			if [ -z "${runtest_line}" ]; then
+				msg="WARNING: no entry found for testcase '${testcase}' (syscall '${syscall_name}')"
+				msg="${msg} in ${runtest_syscalls_file}, skipping"
+				printf '%s\n' "${msg}" >&2
+				continue
+			fi
 
 			set -- ${runtest_line} # word-splitting is desired
 
@@ -401,14 +474,17 @@ run_testcases() {
 			test_bin="$2"
 			shift 2
 			
-			run_testcase "${test_name}" "${test_bin}" "$*"
+			run_testcase "${test_name}" "${test_bin}" "${syscall_name}" "$*"
 		done
 	done
 }
 
 run_tests() {
 
+	printf '%s\n' "Preparing block device required by some testcases..."
 	mount_ltp_dev
+
+	printf '%s\n' "Starting test run. This may take a while..."
 	
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not specify which syscall to test. Test them all
@@ -430,6 +506,8 @@ run_tests() {
 	fi
 
 	unmount_ltp_dev
+
+	printf '%s\n' "Test run finished. Logs stored in: ${LOGS_DIR}"
 }
 
 # Get the 'header' inside dir/*/*.log (does not check if it is, in fact, a log
@@ -513,7 +591,9 @@ compare_extract_summary() {
 	' "${file}"
 }
 
-
+# Builds one self-contained diff log for a testcase: a short status/summary
+# header, followed by the full content of whichever log(s) are available.
+# This is what gets written under diff_logs/<category>/<syscall>/<testcase>.log
 compare_testcase() {
 	reference_file="$1"
 	current_file="$2"
@@ -524,8 +604,15 @@ compare_testcase() {
 	if [ ! -e "${reference_file}" ]; then
 		mkdir -p "${COMPARE_DIR}/new/${syscall_name}"
 
-		printf 'testcase: %s\n' "${testcase_name}" \
-			> "${COMPARE_DIR}/new/${syscall_name}/${testcase_name}.log"
+		out_file="${COMPARE_DIR}/new/${syscall_name}/${testcase_name}.log"
+
+		{
+			printf 'testcase: %s\n' "${testcase_name}"
+			printf 'status: new (not present in the reference set)\n\n'
+			printf -- '---- current log (%s) ----\n' "${current_file}"
+			cat "${current_file}"
+		} > "${out_file}"
+
 		return
 	fi
 
@@ -533,8 +620,15 @@ compare_testcase() {
 	if [ ! -e "${current_file}" ]; then
 		mkdir -p "${COMPARE_DIR}/removed/${syscall_name}"
 
-		printf 'testcase: %s\n' "${testcase_name}" \
-			> "${COMPARE_DIR}/removed/${syscall_name}/${testcase_name}.log"
+		out_file="${COMPARE_DIR}/removed/${syscall_name}/${testcase_name}.log"
+
+		{
+			printf 'testcase: %s\n' "${testcase_name}"
+			printf 'status: removed (not present in the current set)\n\n'
+			printf -- '---- reference log (%s) ----\n' "${reference_file}"
+			cat "${reference_file}"
+		} > "${out_file}"
+
 		return
 	fi
 
@@ -561,11 +655,17 @@ compare_testcase() {
 
 	mkdir -p "${COMPARE_DIR}/${category}/${syscall_name}"
 
+	out_file="${COMPARE_DIR}/${category}/${syscall_name}/${testcase_name}.log"
+
 	{
 		printf 'testcase: %s\n' "${testcase_name}"
 		printf '  reference (passed failed broken skipped warnings): %s\n' "${r_summary}"
-		printf '  current   (passed failed broken skipped warnings): %s\n' "${c_summary}"
-	} > "${COMPARE_DIR}/${category}/${syscall_name}/${testcase_name}.log"
+		printf '  current   (passed failed broken skipped warnings): %s\n\n' "${c_summary}"
+		printf -- '---- reference log (%s) ----\n' "${reference_file}"
+		cat "${reference_file}"
+		printf -- '\n---- current log (%s) ----\n' "${current_file}"
+		cat "${current_file}"
+	} > "${out_file}"
 }
 	
 compare_tests() {
@@ -588,14 +688,19 @@ compare_tests() {
 
 	# Cannot compare if one directory does not exist
 	if [ ! -e "${current_logs_dir}" ]; then
-		printf "Nothing to be compared, \'%s\' not found\n" "${current_logs_dir}" >&2
+		printf "Nothing to be compared, '%s' not found\n" "${current_logs_dir}" >&2
 		exit 1
 	elif [ ! -e "${reference_logs_dir}" ]; then
-		printf "Nothing to be compared, \'%s\' not found\n" "${reference_logs_dir}" >&2
+		printf "Nothing to be compared, '%s' not found\n" "${reference_logs_dir}" >&2
 		exit 1
 	fi
 
 	create_compare_dir 
+
+	printf '%s\n' "Comparing logs:"
+	printf '%s\n' "  reference: ${reference_logs_dir}"
+	printf '%s\n' "  current:   ${current_logs_dir}"
+
 	compare_create_header "${reference_logs_dir}" "${current_logs_dir}"
 
 	# Allow the user to pass which syscall should be compared
@@ -604,6 +709,8 @@ compare_tests() {
 	else
 		all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
 	fi
+
+	printf '%s\n' "Analyzing testcases, this may take a while for large log sets..."
 
 	for syscall in ${all_syscalls}; do
 
@@ -627,12 +734,18 @@ compare_tests() {
 	done
 
 	compare_append_counts
+
+	printf '%s\n' "Comparison finished. Full summary saved to: ${COMPARE_DIR}/summary.log"
+	printf '\n'
+
 	cat "${COMPARE_DIR}/summary.log"
 }
 
 main() {
 	_SCRIPT_INVOCATION="$0 $(quote_args "$@")"
 
+	# Note: for consistency with shell/exit-code convention, 0 means
+	# "yes/true" and 1 means "no/false" for both flags below.
 	should_print_help_message=1
 	compare_mode=1
 
@@ -669,7 +782,7 @@ main() {
 				FAIL_ON_REGRESSION=1
 				;;
 			*)
-				echo "Invalid Option: '${arg}'" >&2
+				printf '%s\n' "Invalid Option: '${arg}'" >&2
 				exit 1
 				;;
 		esac
@@ -694,13 +807,13 @@ main() {
 	if [ "${compare_mode}" -eq 0 ] && [ "${FAIL_ON_REGRESSION}" -eq 1 ]; then
 		regressions="$(find "${COMPARE_DIR}/regressed" -type f -name '*.log' 2>/dev/null | wc -l)"
 		if [ "${regressions}" -gt 0 ]; then
+			printf '%s\n' "FAIL_ON_REGRESSION: found ${regressions} regression(s), exiting with an error." >&2
 			exit 1
 		fi
 	fi
 
 	if [ "${compare_mode}" -eq 1 ] && [ "${FAIL_ON_REGRESSION}" -eq 1 ]; then
-		echo "Flag 'FAIL_ON_REGRESSION' is being used outside comparison mode. \
-			This flag has no effect outside comparison mode"
+		printf '%s\n' "Flag 'FAIL_ON_REGRESSION' is being used outside comparison mode. This flag has no effect outside comparison mode." >&2
 	fi
 }
 
