@@ -11,4 +11,3 @@ LINK_MODE=	static
 LINK_MODE=	dynamic
 EMUL_MODULES.linux=	base
 .endif
-

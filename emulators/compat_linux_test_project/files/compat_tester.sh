@@ -796,11 +796,11 @@ main() {
 
 	update_env_vars
 
-	create_logs_dir 
 
 	if [ "${compare_mode}" -eq 0 ]; then
 		compare_tests
 	else 
+		create_logs_dir 
 		run_tests
 	fi
 
