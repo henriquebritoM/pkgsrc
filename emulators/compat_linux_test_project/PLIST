@@ -1,2 +1,5 @@
 @comment $NetBSD $
 bin/compat_linux_test_project
+share/examples/compat_linux_test_project/basic_run.txt
+share/examples/compat_linux_test_project/comparing.txt
+share/examples/compat_linux_test_project/run-specific-syscalls.txt

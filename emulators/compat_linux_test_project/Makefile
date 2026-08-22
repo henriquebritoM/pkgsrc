@@ -24,7 +24,8 @@ EMUL_REQD+=             suse>=15.5
 
 LTP_PREFIX=     libexec/compat_linux_test_project
 
-INSTALLATION_DIRS=      bin ${LTP_PREFIX}
+EGDIR=                  ${PREFIX}/share/examples/compat_linux_test_project
+INSTALLATION_DIRS=      bin ${LTP_PREFIX} share/examples/compat_linux_test_project
 
 GENERATE_PLIST+=        cd ${DESTDIR}${PREFIX}/${LTP_PREFIX} && \
                         find . -type f | sed 's|^\./|${LTP_PREFIX}/|' ;
@@ -39,9 +40,12 @@ do-build:
 
 do-install:
 		${INSTALL_SCRIPT} ${FILESDIR}/compat_tester.sh \
-                ${DESTDIR}${PREFIX}/bin/compat_linux_test_project
+        		${DESTDIR}${PREFIX}/bin/compat_linux_test_project
 		cd ${WRKSRC}/${LTP_PREFIX} && \
-                pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
+        		pax -rw . ${DESTDIR}${PREFIX}/${LTP_PREFIX}
+
+post-install:
+		${INSTALL_DATA} ${FILESDIR}/examples/*.txt ${DESTDIR}${EGDIR}/
 
 .include "options.mk"
 .include "../../mk/bsd.pkg.mk"
