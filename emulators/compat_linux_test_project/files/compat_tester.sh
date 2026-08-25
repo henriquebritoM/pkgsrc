@@ -69,7 +69,7 @@ LTP_REPRODUCIBLE_OUTPUT=0
 # Here, we use a custom file to tell the tests which features are present.
 # Note that the features is this file are not exhaustive, so some tests may ask
 # for configuration not currently present in the file.
-KCONFIG_PATH="${DATA_DIR}/linux-config"
+KCONFIG_PATH="${DATA_DIR}/linux_config"
 
 # Some testcases verify if the operations were finished under
 # a timer threshold. The LTP way of detecting if the system is
