@@ -25,7 +25,7 @@ SYSCALLS_LIST=""
 BINARIES_DIR="${DATA_DIR}/testcases/bin"
 
 # Index for helping with grouping testcases for syscall
-# LTP uses the file-tree to group them, but we do not have access to the 
+# LTP uses the file-tree to group them, but we do not have access to the
 # file-tree here
 INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 
@@ -47,7 +47,7 @@ COMPARE_DIR="${CALLING_DIR}/diff_logs"
 
 # How many lines the log header takes
 # They all should have the same size, as they are created in a static style
-# This may not be ideal, but there is no need to exchange this method with a 
+# This may not be ideal, but there is no need to exchange this method with a
 # runtime check
 HEADER_LENGTH=10
 
@@ -61,7 +61,7 @@ BLK_FILE="${DATA_DIR}/test.img"
 BLK_VND="vnd0"
 BLK_DEV="/dev/r${BLK_VND}d"
 
-# LTP environment variable. 
+# LTP environment variable.
 # used to trim the tests' outputs to a more 'reproducible' style
 LTP_REPRODUCIBLE_OUTPUT=0
 
@@ -160,16 +160,16 @@ DESCRIPTION
 OPTIONS
 	-d, --output-dir path
 		Behavior depends on the mode the script is run in:
- 
+
 		In test-run mode (default): path is the directory where
 		new logs are stored, overwriting any older logs already there.
- 
+
 		In comparison mode (-c): path is the directory containing the
 		"current" set of logs to compare. Nothing is overwritten in
 		this mode.
 
 	-s, --syscall syscall1[,syscall2,...]
-		A comma-separated list of which syscalls to test. 
+		A comma-separated list of which syscalls to test.
 		The script will search for them using the LTP runtest file,
 		so the name may be slightly different from the syscall name
 		(though this is unusual).
@@ -179,7 +179,7 @@ OPTIONS
 		panics or hangs, see check_for_testcase_issue() in the
 		script). If you explicitly list one of these syscalls here,
 		the script will still run it, but will print a warning first.
-	
+
 	-r, --reproducible
 		Sets the LTP environment variable LTP_REPRODUCIBLE_OUTPUT to 1.
 		According to LTP documentation, this "suppress printing TINFO
@@ -188,7 +188,7 @@ OPTIONS
 		reproducible output)."
 
 		This flag should be set if the logs are meant to be compared.
-	
+
 	-c, --compare-to[=logs_dir]
 		Compares two sets of logs, highlighting their differences. For
 		a consistent comparison, both sets of logs must have been
@@ -210,7 +210,7 @@ OPTIONS
 		present, and tests whose result changed. Changed results are
 		further split into regressions (e.g. PASS -> FAIL), fixes
 		(e.g. FAIL -> PASS) and	other changes (e.g. shift in skipped
-		or warnings). 
+		or warnings).
 
 		Each category is stored in its own subdirectory, mirroring the
 		syscall/testcase layout of the compared logs:
@@ -236,9 +236,9 @@ OPTIONS
 		investigate a specific result; everything relevant is already
 		copied into diff_logs/.
 
-		The comparison assumes the testcases output follows the 
+		The comparison assumes the testcases output follows the
 		standard and new LTP strucuture. This is not true for every
-		testcase, in this case, the comparison has undefined 
+		testcase, in this case, the comparison has undefined
 		behaviour.
 
 	--fail-on-regression
@@ -326,7 +326,7 @@ log_header() {
 	kernel_version="$(uname -r)"
 	kernel_build="$(uname -v)"
 	arch="$(uname -m)"
-	ltp_version="$(cat ${DATA_DIR}/ltp-version.txt)" 
+	ltp_version="$(cat ${DATA_DIR}/ltp-version.txt)"
 
 	cat << EOF
 ---- compat_linux_test_project log header ----
@@ -450,7 +450,7 @@ run_testcases() {
 		# Clears previous logs, if any
 		if [ -e "${syscall_dir:?}" ]; then
 			rm -rf "${syscall_dir:?}"/* 2>/dev/null || true
-		else 
+		else
 			mkdir -p "${syscall_dir}"
 		fi
 
@@ -473,7 +473,7 @@ run_testcases() {
 			test_name="$1"
 			test_bin="$2"
 			shift 2
-			
+
 			run_testcase "${test_name}" "${test_bin}" "${syscall_name}" "$*"
 		done
 	done
@@ -485,15 +485,15 @@ run_tests() {
 	mount_ltp_dev
 
 	printf '%s\n' "Starting test run. This may take a while..."
-	
+
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not specify which syscall to test. Test them all
-		run_testcases 
+		run_testcases
 	else
 		# User specified syscalls to test
 		# Go through each one and test their testcases
 		syscall_list_parsed=$(echo "${SYSCALLS_LIST}" | sed "s/,/ /g")
-	
+
 		set -- ${syscall_list_parsed} # word-splitting is desired
 
 		while [ "$#" -gt 0 ]; do
@@ -667,7 +667,7 @@ compare_testcase() {
 		cat "${current_file}"
 	} > "${out_file}"
 }
-	
+
 compare_tests() {
 	current_logs_dir=""
 	reference_logs_dir=""
@@ -675,14 +675,14 @@ compare_tests() {
 	# Use default, unless user passed another dir as argument
 	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
 		current_logs_dir="${USER_DEFINED_LOGS_DIR}"
-	else 
+	else
 		current_logs_dir="${LOGS_DIR}"
 	fi
 
 	# Use default, unless user passed another dir as argument
 	if [ ! -z "${USER_DEFINED_REFERENCE_DIR}" ]; then
 		reference_logs_dir="${USER_DEFINED_REFERENCE_DIR}"
-	else 
+	else
 		reference_logs_dir=${REFERENCE_LOGS_DIR}
 	fi
 
@@ -695,7 +695,7 @@ compare_tests() {
 		exit 1
 	fi
 
-	create_compare_dir 
+	create_compare_dir
 
 	printf '%s\n' "Comparing logs:"
 	printf '%s\n' "  reference: ${reference_logs_dir}"
@@ -799,8 +799,8 @@ main() {
 
 	if [ "${compare_mode}" -eq 0 ]; then
 		compare_tests
-	else 
-		create_logs_dir 
+	else
+		create_logs_dir
 		run_tests
 	fi
 

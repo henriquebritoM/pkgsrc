@@ -45,7 +45,7 @@ fi
 
 # Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
 # into thinking there is an adequate pkg-config.
-# Compiling the syscalls testcases doesn't require the pkg-config, but 
+# Compiling the syscalls testcases doesn't require the pkg-config, but
 # 'configure' still stops if it cannot be found.
 
 configure_static() {
@@ -70,10 +70,10 @@ compile_setup() {
 	cd "${LTP_DIR}"
 
 	if [ "${LINK_MODE}" = "dynamic" ]; then
-		configure_dynamic 
+		configure_dynamic
 	elif [ "${LINK_MODE}" = "static" ]; then
-		configure_static 
-	else 
+		configure_static
+	else
 		echo "Invalid link mode: \"${LINK_MODE}\"" >&2
 		exit 1
 	fi
@@ -104,8 +104,8 @@ join_runstest_files() {
 }
 
 generate_syscall_index() {
-	join_runstest_files 
-	
+	join_runstest_files
+
 	index_file="${BINARIES_DIR}/syscall-index.txt"
 	runtest_file="${BINARIES_DIR}/syscalls-runtest"
 
