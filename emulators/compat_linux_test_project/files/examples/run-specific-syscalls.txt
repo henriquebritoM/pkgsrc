@@ -1,8 +1,8 @@
 # -----------------------------------------------------------------------------
 # Example: Testing specific syscalls using -s / --syscall
 # -----------------------------------------------------------------------------
-# This mode allows you to isolate one or more specific syscalls instead of 
-# running the full suite. It is highly recommended for quick validations, 
+# This mode allows you to isolate one or more specific syscalls instead of
+# running the full suite. It is highly recommended for quick validations,
 # debugging, or intentionally running risky syscalls that are skipped in bulk mode.
 #
 # 1. Run the script passing a single syscall or a comma-separated list to '-s':
@@ -18,24 +18,32 @@ Starting test run. This may take a while...
 
 ==> Testing syscall: read
 syscall_test: read01
-[...]
+
+[snip]
+
 Summary:
 passed   1
 failed   0
 broken   0
 skipped  0
 warnings 1
-[...]
+
+[snip]
+
 ==> Testing syscall: pipe
 syscall_test: pipe01
-[...]
+
+[snip]
+
 Summary:
 passed   1
 failed   0
 broken   0
 skipped  0
 warnings 1
-[...]
+
+[snip]
+
 Unmounting block device vnd0...
 Test run finished. Logs stored in: /tmp/sys_logs_isolated
 
