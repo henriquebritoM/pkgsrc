@@ -33,17 +33,16 @@ INDEX_FILE="${DATA_DIR}/syscall-index.txt"
 # By joining them we can simplify work later, when iterating through them
 RUNTEST_JOIN_FILE="${DATA_DIR}/syscalls-runtest"
 
-# Directory where logs from tested syscalls are stored
-LOGS_DIR="${CALLING_DIR}/sys_logs"
+# Directory where the output for the script are stored
+OUTPUT_DIR=""
+USER_DEFINED_OUTPUT_DIR=""
+
+# Directory for the reference set of logs to be used in
+# compare mode
+REFERENCE_LOGS_DIR="${DATA_DIR}/reference_logs/reference"
+
+# Directory for the set of logs the user wants to compare
 USER_DEFINED_LOGS_DIR=""
-
-# Directory where the reference logs are stored
-# to be compared against
-REFERENCE_LOGS_DIR=""
-USER_DEFINED_REFERENCE_DIR="${DATA_DIR}/reference_logs/reference"
-
-# Directory where results from comparisons are stored
-COMPARE_DIR="${CALLING_DIR}/diff_logs"
 
 # How many lines the log header takes
 # They all should have the same size, as they are created in a static style
@@ -149,15 +148,13 @@ DESCRIPTION
 		https://github.com/linux-test-project/ltp
 
 OPTIONS
-	-d, --output-dir path
-		Behavior depends on the mode the script is run in:
+	-d, --output-dir output_dir
 
-		In test-run mode (default): path is the directory where
-		new logs are stored, overwriting any older logs already there.
-
-		In comparison mode (-c): path is the directory containing the
-		"current" set of logs to compare. Nothing is overwritten in
-		this mode.
+		Directory where output is written.
+		In test-run mode (default): new logs are stored here,
+		overwriting any older logs already there.
+		In comparison mode (-c): the categorized comparison results
+		(compared_logs/) are stored here instead.
 
 	-s, --syscall syscall1[,syscall2,...]
 		A comma-separated list of which syscalls to test.
@@ -180,18 +177,14 @@ OPTIONS
 
 		This flag should be set if the logs are meant to be compared.
 
-	-c, --compare-to[=logs_dir]
-		Compares two sets of logs, highlighting their differences. For
-		a consistent comparison, both sets of logs must have been
-		created using the 'reproducible' mode ('-r' flag).
+	-c, --compare logs_dir
+		Compares logs_dir agains a baseline, highlighting
+		their differences. For a consistent comparison, both
+		sets of logs should have been gathered using the
+		'reproducible' mode ('-r' flag).
 
-		If no directory is provided through 'logs_dir', the reference
-		shipped	with the package is used to compare against. If a
-		directory is passed, it is used	instead of the reference.
-
-		In both cases, the second set of logs to compare against the
-		reference is taken from '-d' flag, if passed, or from the
-		default 'sys_logs' otherwise.
+		The baseline defaults to the reference logs shipped with the
+		package, or to whatever is passed via '-b'.
 
 		If '-s' is also passed, the comparison is restricted to the
 		syscalls listed there.
@@ -232,6 +225,11 @@ OPTIONS
 		testcase, in this case, the comparison has undefined
 		behaviour.
 
+	-b, --baseline logs_dir
+		Directory with the logs to use as baseline. Only meaningful
+		together with '-c'. Defaults to the reference logs shipped
+		with the package.
+
 	--fail-on-regression
 		Only meaningful together with -c.
 		When this flag is set, the script exits with a non-zero status
@@ -265,35 +263,22 @@ unmount_ltp_dev() {
 	vnconfig -u "${BLK_VND}"
 }
 
-create_logs_dir() {
-	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
-		LOGS_DIR="${USER_DEFINED_LOGS_DIR}"
+create_output_dir() {
+	dir_name="$1"
 
-		# Overwrites any older logs already here
-		if [ -e "${LOGS_DIR}" ]; then
-			printf '%s\n' "Directory '${LOGS_DIR}' already exists, clearing previous logs before starting"
-			rm -rf "${LOGS_DIR:?}"/*
-		fi
+	# If the user passed the output dir, do not try to change
+	# the name
+	if [ ! -z "${USER_DEFINED_OUTPUT_DIR}" ]; then
+		OUTPUT_DIR="${USER_DEFINED_OUTPUT_DIR}"
 
 	else
-		base_logs_dir="$(next_unused_dir_name  "sys_logs")"
+		base_logs_dir="$(next_unused_dir_name  "${dir_name}")"
 
-		LOGS_DIR="${CALLING_DIR}/${base_logs_dir}"
+		OUTPUT_DIR="${CALLING_DIR}/${base_logs_dir}"
 	fi
 
-	mkdir -p "${LOGS_DIR}"
-	printf '%s\n' "Logs will be stored in: ${LOGS_DIR}"
-}
-
-create_compare_dir() {
-
-	if [ -e "${COMPARE_DIR}" ]; then
-		diff_name="$(next_unused_dir_name  "diff_logs")"
-		COMPARE_DIR="${CALLING_DIR}/${diff_name}"
-	fi
-
-	mkdir -p "${COMPARE_DIR}"
-	printf '%s\n' "Comparison output will be stored in: ${COMPARE_DIR}"
+	mkdir -p "${OUTPUT_DIR}"
+	printf '%s\n' "Output will be stored in: ${OUTPUT_DIR}"
 }
 
 # Header stores some useful data about the enviroment in which the tests
@@ -436,7 +421,7 @@ run_testcases() {
 			printf '%s\n' "  -> ${syscall_name}"
 		fi
 
-		syscall_dir="${LOGS_DIR}/${syscall_name}"
+		syscall_dir="${OUTPUT_DIR}/${syscall_name}"
 
 		# Clears previous logs, if any
 		if [ -e "${syscall_dir:?}" ]; then
@@ -477,6 +462,8 @@ run_tests() {
 
 	printf '%s\n' "Starting test run. This may take a while..."
 
+	create_output_dir "sys_logs"
+
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not specify which syscall to test. Test them all
 		run_testcases
@@ -498,7 +485,7 @@ run_tests() {
 
 	unmount_ltp_dev
 
-	printf '%s\n' "Test run finished. Logs stored in: ${LOGS_DIR}"
+	printf '%s\n' "Test run finished. Logs stored in: ${OUTPUT_DIR}"
 }
 
 # Get the 'header' inside dir/*/*.log (does not check if it is, in fact, a log
@@ -537,7 +524,7 @@ compare_create_header() {
 
 		printf 'current set: %s \n' "${current_logs_dir}"
 		printf '%s\n\n' "${current_header}"
-	} > "${COMPARE_DIR}/summary.log"
+	} > "${OUTPUT_DIR}/summary.log"
 
 	# Checks for some fields that *may* be relevant (or even invalidate) some
 	# tests comparisons. Outputs a warning for them.
@@ -548,7 +535,7 @@ compare_create_header() {
 
 		if [ "${reference_val}" != "${current_val}" ]; then
 			printf 'WARNING: %s differs (reference: "%s", current: "%s")\n' \
-				"${field}" "${reference_val}" "${current_val}" >> "${COMPARE_DIR}/summary.log"
+				"${field}" "${reference_val}" "${current_val}" >> "${OUTPUT_DIR}/summary.log"
 		fi
 	done
 }
@@ -563,10 +550,10 @@ compare_append_counts() {
 		printf '\n'
 
 		for category in regressed fixed changed new removed; do
-			count="$(find "${COMPARE_DIR}/${category}" -type f -name '*.log' 2>/dev/null | wc -l)"
+			count="$(find "${OUTPUT_DIR}/${category}" -type f -name '*.log' 2>/dev/null | wc -l)"
 			printf '%-10s %s\n' "${category}:" "${count}"
 		done
-	} >> "${COMPARE_DIR}/summary.log"
+	} >> "${OUTPUT_DIR}/summary.log"
 }
 
 # Extracts the values of the results and returns them in a single line
@@ -593,9 +580,9 @@ compare_testcase() {
 
 	# This testcase is not present in the reference logs, so it is 'new'
 	if [ ! -e "${reference_file}" ]; then
-		mkdir -p "${COMPARE_DIR}/new/${syscall_name}"
+		mkdir -p "${OUTPUT_DIR}/new/${syscall_name}"
 
-		out_file="${COMPARE_DIR}/new/${syscall_name}/${testcase_name}.log"
+		out_file="${OUTPUT_DIR}/new/${syscall_name}/${testcase_name}.log"
 
 		{
 			printf 'testcase: %s\n' "${testcase_name}"
@@ -609,9 +596,9 @@ compare_testcase() {
 
 	# This testcase is not present in the current logs, so it was 'removed'
 	if [ ! -e "${current_file}" ]; then
-		mkdir -p "${COMPARE_DIR}/removed/${syscall_name}"
+		mkdir -p "${OUTPUT_DIR}/removed/${syscall_name}"
 
-		out_file="${COMPARE_DIR}/removed/${syscall_name}/${testcase_name}.log"
+		out_file="${OUTPUT_DIR}/removed/${syscall_name}/${testcase_name}.log"
 
 		{
 			printf 'testcase: %s\n' "${testcase_name}"
@@ -644,9 +631,9 @@ compare_testcase() {
 		category="changed"
 	fi
 
-	mkdir -p "${COMPARE_DIR}/${category}/${syscall_name}"
+	mkdir -p "${OUTPUT_DIR}/${category}/${syscall_name}"
 
-	out_file="${COMPARE_DIR}/${category}/${syscall_name}/${testcase_name}.log"
+	out_file="${OUTPUT_DIR}/${category}/${syscall_name}/${testcase_name}.log"
 
 	{
 		printf 'testcase: %s\n' "${testcase_name}"
@@ -660,22 +647,8 @@ compare_testcase() {
 }
 
 compare_tests() {
-	current_logs_dir=""
-	reference_logs_dir=""
-
-	# Use default, unless user passed another dir as argument
-	if [ ! -z "${USER_DEFINED_LOGS_DIR}" ]; then
-		current_logs_dir="${USER_DEFINED_LOGS_DIR}"
-	else
-		current_logs_dir="${LOGS_DIR}"
-	fi
-
-	# Use default, unless user passed another dir as argument
-	if [ ! -z "${USER_DEFINED_REFERENCE_DIR}" ]; then
-		reference_logs_dir="${USER_DEFINED_REFERENCE_DIR}"
-	else
-		reference_logs_dir=${REFERENCE_LOGS_DIR}
-	fi
+	current_logs_dir="${USER_DEFINED_LOGS_DIR}"
+	reference_logs_dir="${REFERENCE_LOGS_DIR}"
 
 	# Cannot compare if one directory does not exist
 	if [ ! -e "${current_logs_dir}" ]; then
@@ -686,7 +659,7 @@ compare_tests() {
 		exit 1
 	fi
 
-	create_compare_dir
+	create_output_dir "diff_logs"
 
 	printf '%s\n' "Comparing logs:"
 	printf '%s\n' "  reference: ${reference_logs_dir}"
@@ -700,6 +673,8 @@ compare_tests() {
 	else
 		all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
 	fi
+
+	echo "syscall to be compared: ${all_syscalls}"
 
 	printf '%s\n' "Analyzing testcases, this may take a while for large log sets..."
 
@@ -726,10 +701,10 @@ compare_tests() {
 
 	compare_append_counts
 
-	printf '%s\n' "Comparison finished. Full summary saved to: ${COMPARE_DIR}/summary.log"
+	printf '%s\n' "Comparison finished. Full summary saved to: ${OUTPUT_DIR}/summary.log"
 	printf '\n'
 
-	cat "${COMPARE_DIR}/summary.log"
+	cat "${OUTPUT_DIR}/summary.log"
 }
 
 main() {
@@ -750,7 +725,7 @@ main() {
 				;;
 			-d|--output-dir)
 				shift # consumes the flag
-				USER_DEFINED_LOGS_DIR="${CALLING_DIR}/$1" # uses the next
+				USER_DEFINED_OUTPUT_DIR="${CALLING_DIR}/$1" # uses the next
 				;;
 			-h|--help)
 				should_print_help_message=0
@@ -758,15 +733,14 @@ main() {
 			-r|--reproducible)
 				LTP_REPRODUCIBLE_OUTPUT=1
 				;;
-			--compare-to=*)
-				USER_DEFINED_REFERENCE_DIR="${CALLING_DIR}/${arg#--compare-to=}"
+			-c|--compare)
+				shift # consumes the flag
+				USER_DEFINED_LOGS_DIR="${CALLING_DIR}/$1"
 				compare_mode=0
 				;;
-			-c=*)
-				USER_DEFINED_REFERENCE_DIR="${CALLING_DIR}/${arg#-c=}"
-				compare_mode=0
-				;;
-			-c|--compare-to)
+			-b|--baseline)
+				shift # consumes the flag
+				REFERENCE_LOGS_DIR="${CALLING_DIR}/$1"
 				compare_mode=0
 				;;
 			--fail-on-regression)
@@ -808,12 +782,11 @@ main() {
 	if [ "${compare_mode}" -eq 0 ]; then
 		compare_tests
 	else
-		create_logs_dir
 		run_tests
 	fi
 
 	if [ "${compare_mode}" -eq 0 ] && [ "${FAIL_ON_REGRESSION}" -eq 1 ]; then
-		regressions="$(find "${COMPARE_DIR}/regressed" -type f -name '*.log' 2>/dev/null | wc -l)"
+		regressions="$(find "${OUTPUT_DIR}/regressed" -type f -name '*.log' 2>/dev/null | wc -l)"
 		if [ "${regressions}" -gt 0 ]; then
 			printf '%s\n' "FAIL_ON_REGRESSION: found ${regressions} regression(s), exiting with an error." >&2
 			exit 1
