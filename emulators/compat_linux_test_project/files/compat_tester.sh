@@ -386,6 +386,27 @@ check_for_testcase_issue() {
 	esac
 }
 
+# Some tests that have known issues in compat_linux, for
+# various reasons and would not be relevant to test under
+# normal circunstances
+check_for_wont_test() {
+	syscall_name="$1"
+	testcase_name="$2"
+
+	wont_test_cases="futex_wake04 mmap10 recvmsg03 shmctl03 fork05"
+
+	# The user explicitly asked to test this exact syscall (via -s/--syscall). Do not skip.
+	if [ "${syscall_name}" = "${SYSCALL_NAME}" ]; then
+		return 0
+	fi
+	for testcase in ${wont_test_cases}; do
+		if [ "${testcase}" = "${testcase_name}" ]; then
+			return 1
+		fi
+	done
+	return 0
+}
+
 # Runs all testcases for a given syscall, if one provided as argument.
 # Otherwise, goes through all syscalls and testcases listed in the index
 run_testcases() {
@@ -472,14 +493,10 @@ run_tests() {
 		# Go through each one and test their testcases
 		syscall_list_parsed=$(echo "${SYSCALLS_LIST}" | sed "s/,/ /g")
 
-		set -- ${syscall_list_parsed} # word-splitting is desired
-
-		while [ "$#" -gt 0 ]; do
-			SYSCALL_NAME="$1"
+		for s_name in ${syscall_list_parsed}; do
+			SYSCALL_NAME="${s_name}"
 
 			run_testcases "${SYSCALL_NAME}"
-
-			shift
 		done
 	fi
 
@@ -549,7 +566,7 @@ compare_append_counts() {
 		printf '==================================================\n'
 		printf '\n'
 
-		for category in regressed fixed changed new removed; do
+		for category in regressed fixed changed new removed wont_test; do
 			count="$(find "${OUTPUT_DIR}/${category}" -type f -name '*.log' 2>/dev/null | wc -l)"
 			printf '%-10s %s\n' "${category}:" "${count}"
 		done
@@ -620,7 +637,9 @@ compare_testcase() {
 	r_bad="$(printf '%s' "${r_summary}" | awk '{print $2+$3}')"
 	c_bad="$(printf '%s' "${c_summary}" | awk '{print $2+$3}')"
 
-	if [ "${c_bad}" -gt "${r_bad}" ]; then
+	if check_for_wont_test "${syscall_name}" "${testcase_name}"; then
+		category="wont_test"
+	elif [ "${c_bad}" -gt "${r_bad}" ]; then
 		category="regressed"
 	elif [ "${c_bad}" -lt "${r_bad}" ]; then
 		category="fixed"
