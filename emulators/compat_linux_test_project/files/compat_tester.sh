@@ -81,15 +81,6 @@ LTP_VIRT_OVERRIDE="kvm"
 # Recreation of the command and args used to run the script
 _SCRIPT_INVOCATION=""
 
-is_compat_linux_active() {
-    [ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
-}
-
-if ! is_compat_linux_active; then
-	printf 'compat_linux is not active. Try modload compat_linux before running the script' >&2
-	exit 1
-fi
-
 update_env_vars() {
 	export LTPROOT="${DATA_DIR}"
 	export PATH="${PATH}:${BINARIES_DIR}"
@@ -796,6 +787,23 @@ main() {
 
 	update_env_vars
 
+	is_root() {
+		[ "$(id -u)" -eq 0 ]
+	}
+
+	if ! is_root; then
+		printf 'This script should be run as root.\n' >&2
+		printf 'Many Linux Test Project tests do not run well witout root\n' >&2
+	fi
+
+	is_compat_linux_active() {
+		[ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
+	}
+
+	if ! is_compat_linux_active; then
+		printf 'compat_linux is not active. Try modload compat_linux before running the script\n' >&2
+		exit 1
+	fi
 
 	if [ "${compare_mode}" -eq 0 ]; then
 		compare_tests

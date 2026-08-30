@@ -31,17 +31,34 @@ LTP_RELEASE=""
 # The way the testcases should be compiled
 LINK_MODE=""
 
+# Flags used to minimize binary sizes
 CFLAGS="-Os -fno-asynchronous-unwind-tables -fno-unwind-tables -fno-stack-protector"
 LDFLAGS=""
 
-is_compat_linux_active() {
-    [ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
+check_gcc()
+{
+         ${CC} -v > /dev/null
+         if [ $? != 0 ]; then
+                 /sbin/modstat compat_linux | grep -q compat_linux
+                 if [ $? = 0 ]; then
+                         echo "Cannot run Linux gcc, but compat_linux is
+loaded. Exiting"
+                         return 1
+                 fi
+                 /sbin/modstat -e || exit 1
+                 if [ $? != 0 ]; then
+                         echo "Please run modload compat_linux as root"
+                         return 1
+                 fi
+                 /sbin/modload compat_linux || exit 1
+                 ${CC} -v > /dev/null
+                 if [ $? = 0 ]; then
+                         echo "Still unable to run Linux gcc. Exiting"
+                         return 1
+                 fi
+         fi
+         return 0
 }
-
-if ! is_compat_linux_active; then
-	printf 'compat_linux is not active. Try modload compat_linux before running the script' >&2
-	exit 1
-fi
 
 # Here we point PKG_CONFIG to /usr/bin/true to trick LTP's 'configure' script
 # into thinking there is an adequate pkg-config.
@@ -121,7 +138,7 @@ generate_syscall_index() {
 			fi
 
 			testcase="$(basename "${test_src}" .c)"
-				
+
 			# Check if it is reconized as a test by the runtest_file
 			if grep -q "^${testcase}[[:space:]]" "${runtest_file}"; then
 				testcases_list="${testcases_list} ${testcase}"
@@ -130,7 +147,7 @@ generate_syscall_index() {
 
 		# Skipps if empty (no tests found)
 		if [ ! -n "${testcases_list}" ]; then
-			continue 
+			continue
 		fi
 
 		echo "${syscall_name}${testcases_list}" >> "${index_file}"
@@ -153,7 +170,7 @@ main() {
 			shift
 			BINARIES_DIR="$1"
 		elif [ "${arg}" = "--link-mode" ]; then
-			shift 
+			shift
 			LINK_MODE="$1"
 		else
 			echo "Invalid Option: '${arg}'" >&2
@@ -173,12 +190,23 @@ main() {
 		exit 1
 	fi
 
+
+	is_compat_linux_active() {
+		[ "$(sysctl -n emul.linux.enabled 2>/dev/null)" = "1" ]
+	}
+
+	if ! is_compat_linux_active; then
+		printf 'compat_linux is not active. Try modload compat_linux before running the script' >&2
+	fi
+
+	check_gcc || exit 1
+
 	compile_setup
 	compile_tests
 
 	create_block_file
-	generate_syscall_index 
-	save_ltp_release 
+	generate_syscall_index
+	save_ltp_release
 }
 
 main "$@"
