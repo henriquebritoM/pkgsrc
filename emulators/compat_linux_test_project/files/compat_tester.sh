@@ -194,7 +194,9 @@ OPTIONS
 		present, and tests whose result changed. Changed results are
 		further split into regressions (e.g. PASS -> FAIL), fixes
 		(e.g. FAIL -> PASS) and	other changes (e.g. shift in skipped
-		or warnings).
+		or warnings). Some testcases are known to depend on
+		functionalities with no equivalent in NetBSD and are marked
+		as wont_test.
 
 		Each category is stored in its own subdirectory, mirroring the
 		syscall/testcase layout of the compared logs:
@@ -204,8 +206,9 @@ OPTIONS
 			|-- new/
 			|-- regressed/
 			|-- removed/
-			    |-- syscall_a/
-			        |- testcase01.log
+			|   |-- syscall_a/
+			|       |- testcase01.log
+			|-- wont_test/
 
 		Each generated testcase01.log file is self-contained:
 		- For 'new'/'removed' testcases, it has a short status line
