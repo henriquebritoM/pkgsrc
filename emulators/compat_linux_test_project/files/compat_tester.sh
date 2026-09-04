@@ -178,7 +178,7 @@ OPTIONS
 		This flag should be set if the logs are meant to be compared.
 
 	-c, --compare logs_dir
-		Compares logs_dir agains a baseline, highlighting
+		Compares logs_dir against a baseline, highlighting
 		their differences. For a consistent comparison, both
 		sets of logs should have been gathered using the
 		'reproducible' mode ('-r' flag).
