@@ -747,7 +747,7 @@ main() {
 				;;
 			-d|--output-dir)
 				shift # consumes the flag
-				USER_DEFINED_OUTPUT_DIR="${CALLING_DIR}/$1" # uses the next
+				USER_DEFINED_OUTPUT_DIR="$1" # uses the next
 				;;
 			-h|--help)
 				should_print_help_message=0
@@ -757,12 +757,12 @@ main() {
 				;;
 			-c|--compare)
 				shift # consumes the flag
-				USER_DEFINED_LOGS_DIR="${CALLING_DIR}/$1"
+				USER_DEFINED_LOGS_DIR="$1"
 				compare_mode=0
 				;;
 			-b|--baseline)
 				shift # consumes the flag
-				REFERENCE_LOGS_DIR="${CALLING_DIR}/$1"
+				REFERENCE_LOGS_DIR="$1"
 				compare_mode=0
 				;;
 			--fail-on-regression)
