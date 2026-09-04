@@ -195,7 +195,7 @@ OPTIONS
 		further split into regressions (e.g. PASS -> FAIL), fixes
 		(e.g. FAIL -> PASS) and	other changes (e.g. shift in skipped
 		or warnings). Some testcases are known to depend on
-		functionalities with no equivalent in NetBSD and are marked
+		functionality with no equivalent in NetBSD and are marked
 		as wont_test.
 
 		Each category is stored in its own subdirectory, mirroring the
@@ -224,9 +224,9 @@ OPTIONS
 		copied into diff_logs/.
 
 		The comparison assumes the testcases output follows the
-		standard and new LTP strucuture. This is not true for every
+		standard and new LTP structure. This is not true for every
 		testcase, in this case, the comparison has undefined
-		behaviour.
+		behavior.
 
 	-b, --baseline logs_dir
 		Directory with the logs to use as baseline. Only meaningful

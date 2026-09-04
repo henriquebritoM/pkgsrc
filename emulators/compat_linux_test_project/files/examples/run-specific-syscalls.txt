@@ -11,11 +11,10 @@
 
 # Expected output (trimmed):
 
-Logs will be stored in: /tmp/sys_logs_isolated
 Preparing block device required by some testcases...
 Mounting block device vnd0 from image /usr/pkg/libexec/compat_linux_test_project/test.img...
 Starting test run. This may take a while...
-
+Output will be stored in: /tmp/pipe_and_read
 ==> Testing syscall: read
 syscall_test: read01
 
@@ -26,7 +25,7 @@ passed   1
 failed   0
 broken   0
 skipped  0
-warnings 1
+warnings 0
 
 [snip]
 
@@ -40,12 +39,12 @@ passed   1
 failed   0
 broken   0
 skipped  0
-warnings 1
+warnings 0
 
 [snip]
 
 Unmounting block device vnd0...
-Test run finished. Logs stored in: /tmp/sys_logs_isolated
+Test run finished. Logs stored in: /tmp/pipe_and_read
 
 # The output directory will contain only the directories for the requested syscalls:
 #
