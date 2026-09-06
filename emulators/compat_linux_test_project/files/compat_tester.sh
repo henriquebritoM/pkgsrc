@@ -220,8 +220,7 @@ OPTIONS
 		  and the current log.
 		This means you normally do not need to go dig through the
 		original sys_logs/ or reference logs directories to
-		investigate a specific result; everything relevant is already
-		copied into diff_logs/.
+		investigate a specific resuls.
 
 		The comparison assumes the testcases output follows the
 		standard and new LTP structure. This is not true for every
