@@ -695,8 +695,6 @@ compare_tests() {
 		all_syscalls="$( (ls "${reference_logs_dir}"; ls "${current_logs_dir}") | sort -u)"
 	fi
 
-	echo "syscall to be compared: ${all_syscalls}"
-
 	printf '%s\n' "Analyzing testcases, this may take a while for large log sets..."
 
 	for syscall in ${all_syscalls}; do
