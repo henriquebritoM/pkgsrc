@@ -1,20 +1,19 @@
 ---- compat_linux_test_project log header ----
-date: Thu, 27 Aug 2026 00:01:26 +0000
+date: Mon, 5 Oct 2026 00:01:06 +0000
 netbsd_version: 11.0
 netbsd_build: NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
 arch: amd64
 ltp_version: 20260529
-script_invocation: "/usr/pkg/bin/compat_linux_test_project '-r'"
+script_invocation: "/usr/pkg/bin/compat_linux_test_project '-d' 'NetBSD11-logs' '-r'"
 syscall_tested: clock_nanosleep
 reproducible: 1
 --------------------------------------------------
 
-tst_kconfig.c:42: TWARN: 
-tst_kconfig.c:284: TBROK: 
+tst_test.c:1453: TCONF: 
 
 Summary:
 passed   0
 failed   0
-broken   1
-skipped  0
-warnings 1
+broken   0
+skipped  1
+warnings 0
