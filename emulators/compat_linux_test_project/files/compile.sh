@@ -52,7 +52,7 @@ loaded. Exiting"
                  fi
                  /sbin/modload compat_linux || exit 1
                  ${CC} -v > /dev/null
-                 if [ $? = 0 ]; then
+                 if [ $? != 0 ]; then
                          echo "Still unable to run Linux gcc. Exiting"
                          return 1
                  fi
