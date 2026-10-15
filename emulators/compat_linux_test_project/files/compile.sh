@@ -9,6 +9,10 @@
 
 set -e
 
+OS="$(uname -s)"
+MAJOR="$(uname -r)"
+ARCH="$(uname -m)"
+
 # ltp source directory
 LTP_DIR="."
 

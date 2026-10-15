@@ -39,7 +39,7 @@ USER_DEFINED_OUTPUT_DIR=""
 
 # Directory for the reference set of logs to be used in
 # compare mode
-REFERENCE_LOGS_DIR="${DATA_DIR}/reference_logs/reference"
+REFERENCE_LOGS_DIR="${DATA_DIR}/reference_logs/"
 
 # Directory for the set of logs the user wants to compare
 USER_DEFINED_LOGS_DIR=""
