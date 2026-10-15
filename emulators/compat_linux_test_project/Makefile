@@ -24,6 +24,7 @@ EMUL_REQD+=	suse>=15.5
 
 LTP_PREFIX=	libexec/compat_linux_test_project
 REFLOGS_NAME=	${OPSYS}-${OS_VERSION:C/\..*//}-${MACHINE_ARCH}
+REFLOGS_TMP=	${WRKDIR}/reflogs
 
 EGDIR=			${PREFIX}/share/examples/compat_linux_test_project
 INSTALLATION_DIRS=	bin ${LTP_PREFIX}
@@ -60,6 +61,15 @@ update-reference-logs:
 	cd ${WRKDIR} && shar `find ${REFLOGS_NAME} -print` \
 		> ${FILESDIR}/reference_logs/${REFLOGS_NAME}.shar
 	@echo "Wrote ${FILESDIR}/reference_logs/${REFLOGS_NAME}.shar"
+
+.PHONY: generate-reference-logs
+generate-reference-logs:
+	@test "`id -u`" = 0 || { echo "Must be run as root"; exit 1; }
+	@pkg_info -qe ${PKGNAME} || { echo "Install ${PKGNAME} first"; exit 1; }
+	${MKDIR} ${WRKDIR}
+	${RM} -rf ${REFLOGS_TMP}
+	${PREFIX}/bin/compat_linux_test_project -r -d ${REFLOGS_TMP}
+	${MAKE} update-reference-logs REFLOGS_DIR=${REFLOGS_TMP}
 
 .include "options.mk"
 .include "../../mk/bsd.pkg.mk"
