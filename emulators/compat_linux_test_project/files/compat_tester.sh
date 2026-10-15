@@ -8,6 +8,10 @@
 
 set -e
 
+OS="$(uname -s)"
+MAJOR="$(uname -r):C/\..*//}"
+ARCH="$(uname -p)"
+
 # Directory from where the script is being called
 CALLING_DIR="$(pwd)"
 
@@ -39,7 +43,7 @@ USER_DEFINED_OUTPUT_DIR=""
 
 # Directory for the reference set of logs to be used in
 # compare mode
-REFERENCE_LOGS_DIR="${DATA_DIR}/reference_logs/"
+REFERENCE_LOGS_DIR="${DATA_DIR}/reference_logs/${OS}-${MAJOR}-${ARCH}"
 
 # Directory for the set of logs the user wants to compare
 USER_DEFINED_LOGS_DIR=""
