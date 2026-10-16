@@ -81,6 +81,11 @@ KCONFIG_PATH="${DATA_DIR}/linux_config"
 # timers.
 LTP_VIRT_OVERRIDE="kvm"
 
+# If the script should save the core files, if any test crashes
+# Note: for consistency with shell/exit-code convention, 0 means
+# "yes/true" and 1 means "no/false" for the flag below
+SAVE_CORE=1
+
 # Recreation of the command and args used to run the script
 _SCRIPT_INVOCATION=""
 
@@ -242,6 +247,12 @@ OPTIONS
 		if any test is found in compared_logs/regressed/. This is
 		intended for use by automated testing.
 		Has no effect without -c.
+
+	--save-core
+		By default, core dumps are disabled while the tests run.
+		When this flag is set, the kernel writes the core files
+		as usual, usually in the current directory.
+		Has no effect in comparison mode (-c).
 
 	-h, --help
 		Shows this message
@@ -490,6 +501,10 @@ run_tests() {
 	printf '%s\n' "Starting test run. This may take a while..."
 
 	create_output_dir "sys_logs"
+
+	if [ "${SAVE_CORE}" -eq 0 ]; then
+		ulimit -S -c 0
+	fi
 
 	if [ -z "${SYSCALLS_LIST}" ]; then
 		# user did not specify which syscall to test. Test them all
@@ -768,6 +783,9 @@ main() {
 				;;
 			--fail-on-regression)
 				FAIL_ON_REGRESSION=1
+				;;
+			--save-core)
+				SAVE_CORE=0
 				;;
 			*)
 				printf '%s\n' "Invalid Option: '${arg}'" >&2
