@@ -353,7 +353,18 @@ run_testcase() {
 
 	printf '%s\n' "syscall_test: ${test_bin}"
 
-	"${BINARIES_DIR}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || true
+	set -o pipefail
+
+	test_status=0
+	"${BINARIES_DIR}/${test_bin}" "$@" 2>&1 | tee -a "${output_file}" || test_status="$?"
+
+	set +o pipefail
+
+	# Something went wrong and the test was killed by a signal
+	if [ "${test_status:-0}" -ge 128 ]; then
+		printf '\nTESTCASE CRASHED: exit status %s (signal %s)\n' \
+			"${test_status}" "$((test_status - 128))" >> "${output_file}"
+	fi
 }
 
 check_for_testcase_issue() {
