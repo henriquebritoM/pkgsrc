@@ -57,12 +57,17 @@ HEADER_LENGTH=10
 # Script returns an error if the comparison found a change marked as 'regressions'
 FAIL_ON_REGRESSION=0
 
+# Temporary dir used to store runtime variables, like temporary block device
+# Deleted upon exit
+LTP_TMP_DIR=""
+
 # Some tests require a block device to be present.
 # The way LTP tries to get it does not work on NetBSD, so it is necessary
 # to pass through a environment variable
-BLK_FILE="${DATA_DIR}/test.img"
-BLK_VND="vnd0"
-BLK_DEV="/dev/r${BLK_VND}d"
+VND_CONFIGURED=1
+VND_IMAGE=""
+VND_NAME="vnd0"
+VND_DEVICE="/dev/r${VND_DEVICE}d"
 
 # LTP environment variable.
 # used to trim the tests' outputs to a more 'reproducible' style
@@ -259,25 +264,61 @@ OPTIONS
 EOF
 }
 
-mount_ltp_dev() {
+create_temp_dir() {
+	# Remove leftovers of previous runs
+	rm -rf "/var/tmp/compat_ltp".*
 
-	if [ "$(vnconfig -l ${BLK_VND})" != "${BLK_VND}: not in use" ]; then
-		# Stop early if the vnd target is already in use
-		printf '%s\n' "${BLK_VND} is already in use. Cannot continue" >&2
-		printf '%s\n' "Did you stop mid-test? Try running 'vnconfig -u ${BLK_VND}' to free it up, then re-run this script." >&2
-		exit 1
-	else
-		# Mount the vnd if the target is free
-		printf '%s\n' "Mounting block device ${BLK_VND} from image ${BLK_FILE}..."
-		vnconfig "${BLK_VND}" "${BLK_FILE}"
-	fi
+	LTP_TMP_DIR="$(mktemp -d "/var/tmp/compat_ltp.XXXXXX")" || exit 1
 }
 
+delete_temp_dir() {
+	if [ -n "${LTP_TMP_DIR}" ]; then
+		rm -rf "${LTP_TMP_DIR:?}"
+	fi
+	LTP_TMP_DIR=""
+}
+
+# Creates a fresh image for the block device used by some testcases.
+create_block_file() {
+	VND_IMAGE="${LTP_TMP_DIR}/test.img"
+	dd if=/dev/zero of="${VND_IMAGE}" bs=1m count=512
+}
+
+mount_ltp_dev() {
+	# Do not touch the vnd if it is already in use.
+	vnd_state="$(vnconfig -l "${VND_NAME}" 2>&1 || true)"
+
+	if [ "${vnd_state}" != "${VND_NAME}: not in use" ]; then
+		printf '%s\n' "${VND_NAME} is not available: ${vnd_state}" >&2
+		printf '%s\n' "Did you stop mid-test? Try running 'vnconfig -u ${VND_NAME}' to free it up, then re-run this script." >&2
+		exit 1
+	fi
+
+	# Register the cleanup before creating anything
+	trap unmount_ltp_dev EXIT
+	trap 'exit 129' HUP
+	trap 'exit 130' INT
+	trap 'exit 143' TERM
+
+	create_block_file
+
+	printf '%s\n' "Mounting block device ${VND_NAME} from image ${VND_IMAGE}..."
+	vnconfig "${VND_NAME}" "${VND_IMAGE}"
+	VND_CONFIGURED=0
+}
+
+# Safe to call more than once, and with nothing set up yet.
 unmount_ltp_dev() {
-	# unconditionally releases the vnd used by the tests; only called after
-	# a successful mount_ltp_dev, so this should always be safe
-	printf '%s\n' "Unmounting block device ${BLK_VND}..."
-	vnconfig -u "${BLK_VND}"
+	if [ "${VND_CONFIGURED}" -eq 0 ]; then
+		# Marked first, so the vnd is never released twice
+		VND_CONFIGURED=1
+
+		printf '%s\n' "Unmounting block device ${VND_NAME}..."
+		vnconfig -u "${VND_NAME}"
+	fi
+
+	# Removed even if the vnd could not be released
+	delete_temp_dir
 }
 
 create_output_dir() {
@@ -505,6 +546,8 @@ run_testcases() {
 }
 
 run_tests() {
+
+	create_temp_dir
 
 	printf '%s\n' "Preparing block device required by some testcases..."
 	mount_ltp_dev

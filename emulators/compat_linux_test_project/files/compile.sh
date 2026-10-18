@@ -105,10 +105,6 @@ compile_tests() {
 	gmake install -C "${SYSCALL_DIR}/" -j"$(sysctl -n hw.ncpu)" CC="${CC}"
 }
 
-create_block_file() {
-	dd if=/dev/zero of="${BINARIES_DIR}/test.img" bs=1m count=512
-}
-
 # LTP has 2 runtest files related to syscalls, one generic and another only for
 # IPC related syscalls.
 # By joining them we can more easelly go throught both
@@ -204,7 +200,6 @@ main() {
 	compile_setup
 	compile_tests
 
-	create_block_file
 	generate_syscall_index
 	save_ltp_release
 }
