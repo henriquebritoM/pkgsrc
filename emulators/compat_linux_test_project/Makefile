@@ -1,12 +1,12 @@
-# $NetBSD$
+# $NetBSD: Makefile,v 1.2 2026/10/19 10:16:50 sborrill Exp $
 LTP_VERSION=	20260529
-
-PKGNAME=	compat_linux_test_project-${LTP_VERSION}-0.10
+PKGVERSION=	${LTP_VERSION}-0.10
+PKGNAME=	compat_linux_test_project-${PKGVERSION}
 CATEGORIES=	emulators
 MASTER_SITES=	${MASTER_SITE_GITHUB:=linux-test-project/}ltp/releases/download/${LTP_VERSION}/
 DISTFILES=	ltp-full-${LTP_VERSION}.tar.xz
 
-MAINTAINER=	pkg-users@NetBSD.org
+MAINTAINER=	pkgsrc-users@NetBSD.org
 COMMENT=	Package to build and run the Linux Test Project tests on NetBSD
 LICENSE=	2-clause-bsd
 
@@ -54,18 +54,18 @@ post-install:
 
 .PHONY: update-reference-logs
 update-reference-logs:
-	@test -d "${REFLOGS_DIR}" || { echo "Usage: make update-reference-logs REFLOGS_DIR=/path/to/logs"; exit 1; }
+	${TEST} -d "${REFLOGS_DIR}" || { ${ECHO} "Usage: make update-reference-logs REFLOGS_DIR=/path/to/logs"; exit 1; }
 	${MKDIR} ${WRKDIR} ${FILESDIR}/reference_logs
 	${RM} -rf ${WRKDIR}/${REFLOGS_NAME}
 	${CP} -R ${REFLOGS_DIR} ${WRKDIR}/${REFLOGS_NAME}
 	cd ${WRKDIR} && shar `find ${REFLOGS_NAME} -print` \
 		> ${FILESDIR}/reference_logs/${REFLOGS_NAME}.shar
-	@echo "Wrote ${FILESDIR}/reference_logs/${REFLOGS_NAME}.shar"
+	${ECHO} "Wrote ${FILESDIR}/reference_logs/${REFLOGS_NAME}.shar"
 
 .PHONY: generate-reference-logs
 generate-reference-logs:
-	@test "`id -u`" = 0 || { echo "Must be run as root"; exit 1; }
-	@pkg_info -qe ${PKGNAME} || { echo "Install ${PKGNAME} first"; exit 1; }
+	${TEST} "`id -u`" = 0 || { ${ECHO} "Must be run as root"; exit 1; }
+	pkg_info -qe ${PKGNAME} || { ${eCHO} "Install ${PKGNAME} first"; exit 1; }
 	${MKDIR} ${WRKDIR}
 	${RM} -rf ${REFLOGS_TMP}
 	${PREFIX}/bin/compat_linux_test_project -r -d ${REFLOGS_TMP}
