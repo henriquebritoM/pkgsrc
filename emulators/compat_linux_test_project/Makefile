@@ -1,7 +1,8 @@
 # $NetBSD: Makefile,v 1.2 2026/10/19 10:16:50 sborrill Exp $
 LTP_VERSION=	20260529
-PKGVERSION=	${LTP_VERSION}-0.10
+PKGVERSION=	${LTP_VERSION}-0.11
 PKGNAME=	compat_linux_test_project-${PKGVERSION}
+PKGREVISION=	2
 CATEGORIES=	emulators
 MASTER_SITES=	${MASTER_SITE_GITHUB:=linux-test-project/}ltp/releases/download/${LTP_VERSION}/
 DISTFILES=	ltp-full-${LTP_VERSION}.tar.xz
